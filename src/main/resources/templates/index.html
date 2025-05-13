@@ -1,0 +1,41 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generatore di Frasi Nonsense</title>
+  <link rel="stylesheet" href="" th:href="@{\styles\styles.css}" />
+<body>
+  <div class="container">
+    <h1>Generatore di Frasi Nonsense</h1>
+    <div class="input-section">
+      <label for="inputSentence">Inserisci una frase:</label>
+      <textarea id="inputSentence" placeholder="Digita qui la tua frase..."></textarea>
+      <div class="flex-row">
+        <button id="analyzeBtn">Analizza Struttura</button>
+        <button id="generateBtn">Genera Nonsense</button>
+        <select id="templateSelect">
+          <option value="default">Template Predefinito</option>
+          <option value="custom1">Il [noun] [verb] il [adjective] [noun]</option>
+          <option value="custom2">In un [adjective] [noun], [noun] [verb]</option>
+        </select>
+      </div>
+    </div>
+    <div class="output-section">
+      <div class="card">
+        <h2>Albero Sintattico</h2>
+        <div class="output-area" id="syntaxTree">Qui apparirà l'albero...</div>
+      </div>
+      <div class="card">
+        <h2>Estrazione di Parti del Discorso</h2>
+        <div class="output-area" id="extractedWords">Nomi, verbi, aggettivi...</div>
+      </div>
+      <div class="card">
+        <h2>Frase Nonsense Generata</h2>
+        <div class="output-area" id="nonsenseResult">Ecco la tua perla di nonsense!</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
