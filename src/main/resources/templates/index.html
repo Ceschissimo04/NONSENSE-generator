@@ -12,22 +12,24 @@
     <h1>NONSENSE Sentence Generator</h1>
     <div class="main-content">
       <div class="input-section">
-        <label for="inputSentence">Enter a sentence:</label>
-        <textarea id="inputSentence" placeholder="Type your sentence here..."></textarea>
-        <div class="flex-row">
-          <select id="templateSelect">
-            <option value="default">Default Template</option>
-            <option value="custom1">The [noun] [verb] the [adjective] [noun]</option>
-            <option value="custom2">In a [adjective] [noun], [noun] [verb]</option>
-          </select>
-          <select id="tenseSelect">
-            <option value="present">Present</option>
-            <option value="past">Past</option>
-            <option value="future">Future</option>
-          </select>
-          <button id="analyzeBtn">Analyze Structure</button>
-          <button id="generateBtn">Generate Nonsense</button>
-        </div>
+        <form action="/generate" method="post">
+          <label for="inputSentence">Enter a sentence:</label>
+          <textarea id="inputSentence" name="sentence" placeholder="Type your sentence here..." required th:text="${inputSentence}"></textarea>
+          <div class="flex-row">
+            <select id="templateSelect" name="template" th:value="${selectedTemplate}">
+              <option value="default" th:selected="${selectedTemplate} == 'default'">Default Template</option>
+              <option value="custom1" th:selected="${selectedTemplate} == 'custom1'">The [noun] [verb] the [adjective] [noun]</option>
+              <option value="custom2" th:selected="${selectedTemplate} == 'custom2'">In a [adjective] [noun], [noun] [verb]</option>
+            </select>
+            <select id="tenseSelect" name="tense" th:value="${selectedTense}">
+              <option value="present" th:selected="${selectedTense} == 'present'">Present</option>
+              <option value="past" th:selected="${selectedTense} == 'past'">Past</option>
+              <option value="future" th:selected="${selectedTense} == 'future'">Future</option>
+            </select>
+            <button type="button" id="analyzeBtn">Analyze Structure</button>
+            <button type="submit" id="generateBtn">Generate Nonsense</button>
+          </div>
+        </form>
       </div>
       <div class="output-section">
         <div class="card">
@@ -40,7 +42,7 @@
         </div>
         <div class="card">
           <h2>Generated Nonsense Sentence</h2>
-          <div class="output-area" id="nonsenseResult">Here is your nonsense gem!</div>
+          <div class="output-area" id="nonsenseResult" th:text="${nonsenseResult}">Here is your nonsense gem!</div>
         </div>
       </div>
     </div>
