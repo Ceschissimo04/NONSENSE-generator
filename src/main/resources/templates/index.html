@@ -18,8 +18,7 @@
           <div class="flex-row">
             <select id="templateSelect" name="template" th:value="${selectedTemplate}">
               <option value="default" th:selected="${selectedTemplate} == 'default'">Default Template</option>
-              <option value="custom1" th:selected="${selectedTemplate} == 'custom1'">The [noun] [verb] the [adjective] [noun]</option>
-              <option value="custom2" th:selected="${selectedTemplate} == 'custom2'">In a [adjective] [noun], [noun] [verb]</option>
+              <option th:each="template: ${templateList}" th:selected="${selectedTemplate} == ${template}" th:value="${template}" th:text="${template}"></option>
             </select>
             <select id="tenseSelect" name="tense" th:value="${selectedTense}">
               <option value="present" th:selected="${selectedTense} == 'present'">Present</option>

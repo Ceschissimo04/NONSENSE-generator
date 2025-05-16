@@ -17,7 +17,7 @@ public class Verbs implements Word {
     }
 
     @Override
-    public Boolean getFromFile() {
+    public void getFromFile() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getFromFile'");
     }
