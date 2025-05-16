@@ -18,7 +18,7 @@ public class Nouns implements Word {
     }
 
     @Override
-    public String getRandom() {
+    public String getRandom(String optional) {
         int intRandom = (int) (Math.floor(Math.random() * allNouns.size()));
         return allNouns.get(intRandom);
     }
@@ -26,7 +26,7 @@ public class Nouns implements Word {
     @Override
     public void getFromFile() {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/json/nouns.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/files/nouns.txt"));
             while (br.ready()) allNouns.add(br.readLine());
             br.close();
         } catch (Exception e) { e.printStackTrace(); }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.test.elementiIngegneria.model.Nouns;
+import com.test.elementiIngegneria.model.Verbs;
 
 import org.springframework.ui.Model;
 
@@ -26,9 +27,9 @@ public class ControllerApplication {
     @GetMapping("/")
     public String Controller(Model model) {
 
-        Nouns nouns = new Nouns();
+        Verbs nouns = new Verbs();
 
-        System.out.println(nouns.getRandom());
+        System.out.println();
 
         try {model.addAttribute("templateList", loadTemplate("src/main/resources/static/templates/templates.txt"));}
         catch (IOException e) {e.printStackTrace();}

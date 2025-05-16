@@ -14,7 +14,7 @@ public class Adjectives implements Word {
     }
 
     @Override
-    public String getRandom() {
+    public String getRandom(String optional) {
         int intRandom = (int) (Math.floor(Math.random() * allAdjectives.size()));
         return allAdjectives.get(intRandom);
     }
@@ -22,7 +22,7 @@ public class Adjectives implements Word {
     @Override
     public void getFromFile() {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/json/adjs.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/files/adjs.txt"));
             while (br.ready()) allAdjectives.add(br.readLine());
             br.close();
         } catch (Exception e) { e.printStackTrace(); }
