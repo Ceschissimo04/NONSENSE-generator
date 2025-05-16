@@ -1,0 +1,26 @@
+two buttons:
+
+-analyze
+    user types a sentence 
+    clicks analyze button
+    two outcomes:
+        -frase di senso compiuto -> mostra syntax tree
+        -altrimenti -> errore
+
+
+
+-generate
+    user may type something
+    user may choose template
+    user may choose tense
+    user clicks button
+    if user typed words:
+        show their structure (ie: user types I want a banana, output becomes I->noun, want->verb, banana->noun)
+        other things gets discarded (proposizioni, articoli...)
+
+        if wordlist contains types of words not in template (ie user typed an adverb but choose [noun][verb])
+            then show error
+        otherwise
+            use this words to generate sentences until all words have been used
+    otherwise:
+        generate a random sentence
