@@ -29,15 +29,15 @@
               <option value="past" th:selected="${selectedTense} == 'past'">Past</option>
               <option value="future" th:selected="${selectedTense} == 'future'">Future</option>
             </select>
-            <button type="button" id="analyzeBtn">Analyze Structure</button>
-            <button type="submit" id="generateBtn">Generate Nonsense</button>
+            <button type="submit" id="analyzeBtn" formaction="/analyze">Analyze Structure</button>
+            <button type="submit" id="generateBtn" formaction="/generate">Generate Nonsense</button>
           </div>
         </form>
       </div>
       <div class="output-section">
         <div class="card">
           <h2>Syntax Tree</h2>
-          <div class="output-area" id="syntaxTree">The tree will appear here...</div>
+          <div class="output-area" id="syntaxTree" th:text="${syntaxTree}">The tree will appear here...</div>
         </div>
         <div class="card">
           <h2>Parts of Speech Extraction</h2>
