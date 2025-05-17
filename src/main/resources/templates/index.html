@@ -1,12 +1,14 @@
 <!-- index.html -->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nonsense Sentence Generator</title>
   <link rel="stylesheet" href="../static/styles/styles.css" th:href="@{\styles\styles.css}" />
 </head>
+
 <body>
   <div class="container">
     <h1>NONSENSE Sentence Generator</h1>
@@ -14,11 +16,13 @@
       <div class="input-section">
         <form action="/generate" method="post">
           <label for="inputSentence">Enter a sentence:</label>
-          <textarea id="inputSentence" name="sentence" placeholder="Type your sentence here..." required th:text="${inputSentence}"></textarea>
+          <textarea id="inputSentence" name="sentence" placeholder="Type your sentence here..." required
+            th:text="${inputSentence}"></textarea>
           <div class="flex-row">
             <select id="templateSelect" name="template" th:value="${selectedTemplate}">
-              <option value="default" th:selected="${selectedTemplate} == 'default'">Default Template</option>
-              <option th:each="template: ${templateList}" th:selected="${selectedTemplate} == ${template}" th:value="${template}" th:text="${template}"></option>
+              <option value="default" th:selected="${selectedTemplate} == 'default'">Random Template</option>
+              <option th:each="template: ${templateList}" th:selected="${selectedTemplate} == ${template}"
+                th:value="${template}" th:text="${template}"></option>
             </select>
             <select id="tenseSelect" name="tense" th:value="${selectedTense}">
               <option value="present" th:selected="${selectedTense} == 'present'">Present</option>
@@ -47,4 +51,5 @@
     </div>
   </div>
 </body>
+
 </html>
