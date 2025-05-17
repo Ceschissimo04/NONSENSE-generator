@@ -20,7 +20,13 @@ public class Verbs implements Word {
         getFromFile();
     }
 
-    //
+    /* public String translateVerb(String verb, String tense, String person){
+        if (tense.equals("present") && person.equals("nothird")) return verb;
+        else if (tense.equals("past")) return allVerbs.get(verb)[1];
+        else if (tense.equals("future")) return allVerbs.get(verb)[2];
+        else return allVerbs.get(verb)[0];
+    } */
+
     @Override
     public String getRandom(String optional) {
         int intRandom = (int) (Math.floor(Math.random() * keys.size()));
