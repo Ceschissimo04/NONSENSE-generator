@@ -83,7 +83,7 @@ button:hover {
   justify-content: flex-start;
 }
 
-.flex-row > * {
+.flex-row>* {
   flex: 1 1 120px;
   min-width: 120px;
 }
@@ -122,18 +122,86 @@ button:hover {
     padding: 1rem 0.5rem;
     max-width: 98vw;
   }
+
   h1 {
     font-size: 1.5rem;
   }
+
   .main-content {
     gap: 1.2rem;
   }
+
   .flex-row {
     flex-direction: column;
     gap: 0.5rem;
   }
-  .flex-row > * {
+
+  .flex-row>* {
     min-width: 100%;
     flex: 1 1 100%;
   }
+}
+
+.tree ul {
+  padding-top: 20px;
+  position: relative;
+  display: table;
+  margin: 0 auto;
+}
+
+.tree li {
+  display: table-cell;
+  text-align: center;
+  position: relative;
+  padding: 20px 5px 0 5px;
+  vertical-align: top;
+}
+
+.tree li::before,
+.tree li::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 50%;
+  border-top: 1px solid #ccc;
+  width: 50%;
+  height: 20px;
+}
+
+.tree li::after {
+  right: auto;
+  left: 50%;
+  border-left: 1px solid #ccc;
+}
+
+.tree li:only-child::before,
+.tree li:only-child::after {
+  content: none;
+}
+
+.tree li:only-child {
+  padding-top: 0;
+}
+
+.tree li:first-child::before,
+.tree li:last-child::after {
+  border: none;
+}
+
+.tree li:last-child::before {
+  border-right: 1px solid #ccc;
+  border-radius: 0 5px 0 0;
+}
+
+.tree li:first-child::after {
+  border-radius: 5px 0 0 0;
+}
+
+.tree .node {
+  display: inline-block;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #fdfdfd;
+  font-family: Arial, sans-serif;
 }
