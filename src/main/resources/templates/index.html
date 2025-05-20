@@ -7,24 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nonsense Sentence Generator</title>
   <link rel="stylesheet" href="../static/styles/styles.css" th:href="@{\styles\styles.css}" />
-  <script>
-    
-    function reloadCSS() {
-      const links = document.querySelectorAll('link[rel="stylesheet"]');
-      links.forEach(link => {
-        const newLink = link.cloneNode();
-        const href = link.href.split('?')[0]; // rimuove vecchi parametri cache
-        newLink.href = href + '?v=' + new Date().getTime(); // forza reload
-
-        newLink.onload = () => {
-          link.remove(); // rimuove il vecchio quando il nuovo è pronto
-        };
-
-        link.parentNode.insertBefore(newLink, link.nextSibling);
-      });
-    }
-
-  </script>
 </head>
 
 <body>
@@ -55,7 +37,7 @@
       <div class="output-section">
         <div class="card">
           <h2>Syntax Tree</h2>
-          <div class="output-area" id="syntaxTree" th:text="${syntaxTree}">The tree will appear here...</div>
+          <div class="output-area" id="syntaxTree" th:utext="${syntaxTree}">The tree will appear here...</div>
         </div>
         <div class="card">
           <h2>Parts of Speech Extraction</h2>
@@ -67,6 +49,9 @@
         </div>
       </div>
     </div>
+  </div>
+  <div th:utext="${syntaxTree}">
+
   </div>
 </body>
 
