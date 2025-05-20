@@ -34,3 +34,6 @@ build/
 
 ### Api key ###
 config.json
+
+
+.DS_Store

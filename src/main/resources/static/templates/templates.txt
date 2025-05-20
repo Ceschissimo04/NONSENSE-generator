@@ -1,7 +1,7 @@
 The [noun] [verb] the [adjective] [noun]
 The [adjective] [noun] [verb] the [noun]
 The [noun] [verb] a [adjective] [noun]
-The [noun] [verb] the [noun] and the [noun]
+The [noun] [verb] the [noun] and the [adjective] [noun]
 A [noun] [verb] the [adjective] [noun]
 The [noun] [verb] an [adjective] [noun]
 The [noun] [verb] both the [adjective] [noun] and the [noun]

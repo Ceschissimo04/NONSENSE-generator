@@ -1,0 +1,6 @@
+Sentence: the cat is oon the table 
+Template: The [noun] [verb] the [noun] and the [adjective] [noun]
+Tense: future
+
+Generated Sentences
+---------------------------------------------------------------------------

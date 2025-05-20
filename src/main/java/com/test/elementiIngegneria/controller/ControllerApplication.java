@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 @Controller
 public class ControllerApplication {
     public static final String DEFAULT_LANGUAGE = "en";
@@ -27,7 +30,7 @@ public class ControllerApplication {
         return "index";
     }
 
-    // pagina a cui rimanda il form
+    // Form submit to this page
     @PostMapping("/generate")
     public String generaNonsense(
             @RequestParam("sentence") String sentence,
@@ -37,12 +40,16 @@ public class ControllerApplication {
 
         String nonsense = "Sentence: " + sentence + " ;  Template: " + template + " ; Tense: " + tense;
 
-        // passa i risultati alla pagina index.html
+        // Pass the results to the page index.html
         model.addAttribute("nonsenseResult", nonsense);
         model.addAttribute("inputSentence", sentence);
         model.addAttribute("selectedTemplate", template);
         model.addAttribute("selectedTense", tense);
 
+        // Save to the file generated.txt the generated NonSense sentences
+        ArrayList<String> generated = new ArrayList<>();
+        SaveToFile.SavetoFile(generated, sentence, template, tense, "src/main/resources/static/files/generated.txt");
+        
         try {
             model.addAttribute("templateList", loadTemplate("src/main/resources/static/templates/templates.txt"));
         } catch (IOException e) {
