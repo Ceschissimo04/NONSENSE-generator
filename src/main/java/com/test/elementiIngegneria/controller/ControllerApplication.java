@@ -23,6 +23,10 @@ public class ControllerApplication {
             e.printStackTrace();
         }
 
+        model.addAttribute("syntaxTree", "The tree will appear here...");
+        model.addAttribute("nonsenseResult", "Your nonsense sentence will appear here ...");
+        model.addAttribute("extractedWords", "The template will appear here...");
+
         return "index";
     }
 
@@ -34,13 +38,15 @@ public class ControllerApplication {
             @RequestParam("tense") String tense,
             Model model) {
 
-        String nonsense = "Sentence: " + sentence + " ;  Template: " + template + " ; Tense: " + tense;
+        String nonsense = "";
 
         // Pass the results to the page index.html
         model.addAttribute("nonsenseResult", nonsense);
         model.addAttribute("inputSentence", sentence);
         model.addAttribute("selectedTemplate", template);
         model.addAttribute("selectedTense", tense);
+        model.addAttribute("syntaxTree", "The tree will appear here...");
+        model.addAttribute("extractedWords", Analyzer.getPartsOfText(nonsense, "en"));
 
         // Save to the file generated.txt the generated NonSense sentences
         ArrayList<String> generated = new ArrayList<>();
@@ -64,6 +70,8 @@ public class ControllerApplication {
         
         String result = Analyzer.getSyntaxTree(sentence, DEFAULT_LANGUAGE);
         model.addAttribute("syntaxTree", result);
+        model.addAttribute("nonsenseResult", "Your nonsense sentence will appear here ...");
+        model.addAttribute("extractedWords", Analyzer.getPartsOfText(sentence, "en"));
         return "index";
     }
 
