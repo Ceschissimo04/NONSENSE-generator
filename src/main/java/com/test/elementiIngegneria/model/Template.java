@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Template {
-private ArrayList<String> allTemplates;
+private static ArrayList<String> allTemplates;
 
     public Template(){
         allTemplates = new ArrayList<>();
@@ -18,7 +18,7 @@ private ArrayList<String> allTemplates;
         return allTemplates;
     }
 
-    public String getRandom(String optional) {
+    public static String getRandom(String optional) {
         int intRandom = (int) (Math.floor(Math.random() * allTemplates.size()));
         return allTemplates.get(intRandom);
     }
