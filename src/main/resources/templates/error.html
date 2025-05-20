@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Error</title>
-    <link rel="stylesheet" href="/static/css/style.css"> <!-- Assuming index.html uses this stylesheet -->
+    <link rel="stylesheet" href="/static/css/style.css" th:href="@{\styles\styles.css}"> <!-- Assuming index.html uses this stylesheet -->
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Error</h1>
+            <h1 >Error</h1>
         </header>
         <main>
             <section class="error-message">
-                <h2>Something went wrong</h2>
+                <h2 style="color: red;" th:text="${errorMessage}"></h2>
                 <p>We encountered an unexpected error. Please try again later or contact support if the issue persists.</p>
                 <a href="/" class="btn">Go to Homepage</a>
             </section>
