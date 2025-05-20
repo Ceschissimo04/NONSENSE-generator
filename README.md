@@ -8,9 +8,9 @@ The NONSENSE generator is a playful application
 
 ## Features
 1. aa
-2. b
-3. bd
-4. cc
+2. aggiungere al dizionario
+3. generatore di syntax tree
+4. valutatore di tossicità
 
 ## Installation and Launch Instructions
 
