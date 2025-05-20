@@ -11,10 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 @Controller
 public class ControllerApplication {
     public static final String DEFAULT_LANGUAGE = "en";
