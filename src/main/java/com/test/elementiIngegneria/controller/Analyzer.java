@@ -1,5 +1,7 @@
 package com.test.elementiIngegneria.controller;
 
+import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,7 +9,7 @@ import org.json.JSONObject;
 import com.test.elementiIngegneria.model.Node;
 
 public class Analyzer {
-    public static String getSyntaxTree(String text, String language) {
+    public static String getPartsOfText(String text, String language) {
         String query_output = Querier.doSomething(text, language);
         try {
             JSONObject jsonObject = new JSONObject(query_output);
@@ -30,6 +32,40 @@ public class Analyzer {
                 }
             }
             return syntaxTree.toString().trim();
+        } catch (JSONException err) {
+            System.out.println("error");
+        }
+        return "Something went wrong";
+    }
+
+    public static String getSyntaxTree(String text, String language) {
+        String query_output = Querier.doSomething(text, language);
+        try {
+            JSONObject jsonObject = new JSONObject(query_output);
+            JSONArray tokens = jsonObject.getJSONArray("tokens");
+            ArrayList<Node> nodes = new ArrayList<>(tokens.length());
+            for (int i = 0; i < tokens.length(); i++) {
+                nodes.add(new Node());
+            }
+
+            int rootIndex = -1;
+            for (int i = 0; i < tokens.length(); i++) {
+                JSONObject token = tokens.getJSONObject(i);
+                String word = token.getJSONObject("text").getString("content");
+                String label = token.getJSONObject("dependencyEdge").getString("label");
+                int fatherIndex = token.getJSONObject("dependencyEdge").getInt("headTokenIndex");
+
+                nodes.get(i).setName(label + ": " + word);
+
+                // don't add father to root
+                if (!label.equals("ROOT")){
+                    nodes.get(fatherIndex).addChild(nodes.get(i));
+                }
+                else{
+                    rootIndex = i;
+                }
+            }
+            return generaHTML(nodes.get(rootIndex));
         } catch (JSONException err) {
             System.out.println("error");
         }
