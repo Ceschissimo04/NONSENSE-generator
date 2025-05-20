@@ -1,6 +1,7 @@
 package com.test.elementiIngegneria.controller;
 
 import java.util.ArrayList;
+
 import com.test.elementiIngegneria.model.Template;
 
 public class Generator {
@@ -10,18 +11,36 @@ public class Generator {
         ArrayList<String> adjectives = new ArrayList<>();
         ArrayList<String> verbs = new ArrayList<>();
         ArrayList<String> sentences = new ArrayList<>();
+        ArrayList<String[]> elements = new ArrayList<>();
 
         //controlla se la frase è vuota
         if (sentence == null || sentence.isEmpty()) {
             return null;
         }
         else{
-            //controllare il tipo delle parole(nouns/adjectives/verbs)
-            //=>chiamata api a qualcosa che ti da il tipo della parola
-            //aggiungi nouns/adjectives/verbs alle rispettive liste
-            //mescola le liste, per creare un po' di rqandomità
+
+            //mescola elements, per creare un po' di rqandomità
+
+            elements = Analyzer.getElementsOfText(sentence, "it");
+            for(String[] s : elements) {
+                String partOfSpeech = s[0];
+                switch (partOfSpeech) {
+                    case "NOUN":
+                        nouns.add(s[0]);
+                        break;
+                    case "ADJ":
+                        adjectives.add(s[0]);
+                        break;
+                    case "VERB":
+                        verbs.add(s[0]);
+                        break;
+                    default:
+                        // handle other cases if needed
+                        break;
+                }
+            }
+
         } 
-        //prendi il template principale e riempilo con le liste
         
         //semplifico il template
         ArrayList<String> simplifiedTemplate = Template.extractBracketWords(template);

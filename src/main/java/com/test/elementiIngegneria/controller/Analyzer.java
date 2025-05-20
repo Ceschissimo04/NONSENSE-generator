@@ -38,6 +38,30 @@ public class Analyzer {
         return "Something went wrong";
     }
 
+    //nome da cambiare
+    public static ArrayList<String[]> getElementsOfText(String text, String language) {
+        String query_output = Querier.doSomething(text, language);
+        ArrayList<String[]> result = new ArrayList<>();
+        try {
+            JSONObject jsonObject = new JSONObject(query_output);
+            JSONArray tokens = jsonObject.getJSONArray("tokens");
+            StringBuilder syntaxTree = new StringBuilder();
+            for (int i = 0; i < tokens.length(); i++) {
+                JSONObject token = tokens.getJSONObject(i);
+                String word = token.getJSONObject("text").getString("content");
+                String partOfSpeech = token.getJSONObject("partOfSpeech").getString("tag");
+
+                if (partOfSpeech.equals("NOUN") || partOfSpeech.equals("VERB") || partOfSpeech.equals("ADJ")) {
+                    result.add(new String[]{word, partOfSpeech});
+                }
+            }
+            return result;
+        } catch (JSONException err) {
+            System.out.println("error");
+        }
+        return null;
+    }
+
     public static String getSyntaxTree(String text, String language) {
         String query_output = Querier.doSomething(text, language);
         try {
