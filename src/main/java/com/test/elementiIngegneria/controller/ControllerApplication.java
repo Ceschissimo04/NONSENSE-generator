@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.test.elementiIngegneria.model.Template;
+
 @Controller
 public class ControllerApplication {
     public static final String DEFAULT_LANGUAGE = "en";
-    
+
     @GetMapping("/")
     public String Controller(Model model) {
         try {
@@ -41,17 +43,35 @@ public class ControllerApplication {
         String nonsense = "";
 
         // Pass the results to the page index.html
-        model.addAttribute("nonsenseResult", nonsense);
+        // model.addAttribute("nonsenseResult", nonsense);
         model.addAttribute("inputSentence", sentence);
-        model.addAttribute("selectedTemplate", template);
         model.addAttribute("selectedTense", tense);
         model.addAttribute("syntaxTree", "The tree will appear here...");
         model.addAttribute("extractedWords", Analyzer.getPartsOfText(nonsense, "en"));
+        model.addAttribute("selectedTemplate", template);
+
+        // If the template is set to "default", a random template is selected
+        if (template.equals("default")) {
+            Template templates = new Template();
+            // Non no se sia utilizzabile in maniera statica perché per poter funzionare
+            // deve caricare da file dal costruttore
+            template = templates.getRandom(null);
+        }
+
+        // Generate the NonSense sentences
+        Generator generator = new Generator();
+        ArrayList<String> generated = generator.generateStrings(sentence, template, tense);
+        if (generated != null && !generated.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (String s : generated) {
+                sb.append(s).append("<br>");
+            }
+            model.addAttribute("nonsenseResult", sb.toString());
+        }
 
         // Save to the file generated.txt the generated NonSense sentences
-        ArrayList<String> generated = new ArrayList<>();
         SaveToFile.SavetoFile(generated, sentence, template, tense, "src/main/resources/static/files/generated.txt");
-        
+
         try {
             model.addAttribute("templateList", loadTemplate("src/main/resources/static/templates/templates.txt"));
         } catch (IOException e) {
@@ -67,7 +87,7 @@ public class ControllerApplication {
             Model model) {
 
         model.addAttribute("inputSentence", sentence);
-        
+
         String result = Analyzer.getSyntaxTree(sentence, DEFAULT_LANGUAGE);
         model.addAttribute("syntaxTree", result);
         model.addAttribute("nonsenseResult", "Your nonsense sentence will appear here ...");

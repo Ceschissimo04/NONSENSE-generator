@@ -38,21 +38,20 @@ public class Analyzer {
         return "Something went wrong";
     }
 
-    //nome da cambiare
+    // nome da cambiare
     public static ArrayList<String[]> getElementsOfText(String text, String language) {
         String query_output = Querier.doSomething(text, language);
         ArrayList<String[]> result = new ArrayList<>();
         try {
             JSONObject jsonObject = new JSONObject(query_output);
             JSONArray tokens = jsonObject.getJSONArray("tokens");
-            StringBuilder syntaxTree = new StringBuilder();
             for (int i = 0; i < tokens.length(); i++) {
                 JSONObject token = tokens.getJSONObject(i);
                 String word = token.getJSONObject("text").getString("content");
                 String partOfSpeech = token.getJSONObject("partOfSpeech").getString("tag");
 
                 if (partOfSpeech.equals("NOUN") || partOfSpeech.equals("VERB") || partOfSpeech.equals("ADJ")) {
-                    result.add(new String[]{word, partOfSpeech});
+                    result.add(new String[] { word, partOfSpeech });
                 }
             }
             return result;
@@ -82,10 +81,9 @@ public class Analyzer {
                 nodes.get(i).setName(label + ": " + word);
 
                 // don't add father to root
-                if (!label.equals("ROOT")){
+                if (!label.equals("ROOT")) {
                     nodes.get(fatherIndex).addChild(nodes.get(i));
-                }
-                else{
+                } else {
                     rootIndex = i;
                 }
             }

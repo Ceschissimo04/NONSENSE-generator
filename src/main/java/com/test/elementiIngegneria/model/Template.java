@@ -25,7 +25,7 @@ private static ArrayList<String> allTemplates;
 
     public void getFromFile() {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/templates/template.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/templates/templates.txt"));
             while (br.ready()) allTemplates.add(br.readLine());
             br.close();
         } catch (Exception e) { e.printStackTrace(); }
