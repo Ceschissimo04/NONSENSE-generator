@@ -18,7 +18,7 @@ public class Nouns implements Word {
     }
 
     @Override
-    public String getRandom(String optional) {
+    public String getRandom() {
         int intRandom = (int) (Math.floor(Math.random() * allNouns.size()));
         return allNouns.get(intRandom);
     }

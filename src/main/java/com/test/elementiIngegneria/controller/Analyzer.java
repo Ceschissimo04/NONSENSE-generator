@@ -10,7 +10,7 @@ import com.test.elementiIngegneria.model.Node;
 
 public class Analyzer {
     public static String getPartsOfText(String text, String language) {
-        String query_output = Querier.doSomething(text, language);
+        String query_output = Querier.analyzeTextSyntax(text, language);
         try {
             JSONObject jsonObject = new JSONObject(query_output);
             JSONArray tokens = jsonObject.getJSONArray("tokens");
@@ -40,7 +40,7 @@ public class Analyzer {
 
     // nome da cambiare
     public static ArrayList<String[]> getElementsOfText(String text, String language) {
-        String query_output = Querier.doSomething(text, language);
+        String query_output = Querier.analyzeTextSyntax(text, language);
         ArrayList<String[]> result = new ArrayList<>();
         try {
             JSONObject jsonObject = new JSONObject(query_output);
@@ -61,8 +61,31 @@ public class Analyzer {
         return null;
     }
 
+    // nome da cambiare
+    public static ArrayList<String[]> getElementsOfTextLemma(String text, String language) {
+        String query_output = Querier.analyzeTextSyntax(text, language);
+        ArrayList<String[]> result = new ArrayList<>();
+        try {
+            JSONObject jsonObject = new JSONObject(query_output);
+            JSONArray tokens = jsonObject.getJSONArray("tokens");
+            for (int i = 0; i < tokens.length(); i++) {
+                JSONObject token = tokens.getJSONObject(i);
+                String lemma = token.getString("lemma");
+                String partOfSpeech = token.getJSONObject("partOfSpeech").getString("tag");
+
+                if (partOfSpeech.equals("NOUN") || partOfSpeech.equals("VERB") || partOfSpeech.equals("ADJ")) {
+                    result.add(new String[] { lemma, partOfSpeech });
+                }
+            }
+            return result;
+        } catch (JSONException err) {
+            System.out.println("error");
+        }
+        return null;
+    }
+
     public static String getSyntaxTree(String text, String language) {
-        String query_output = Querier.doSomething(text, language);
+        String query_output = Querier.analyzeTextSyntax(text, language);
         try {
             JSONObject jsonObject = new JSONObject(query_output);
             JSONArray tokens = jsonObject.getJSONArray("tokens");

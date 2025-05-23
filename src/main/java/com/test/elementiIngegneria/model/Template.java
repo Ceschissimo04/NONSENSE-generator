@@ -9,21 +9,21 @@ import java.util.regex.Pattern;
 public class Template {
 private static ArrayList<String> allTemplates;
 
-    public Template(){
+    static {
         allTemplates = new ArrayList<>();
         getFromFile();
     }
 
-    public ArrayList<String> getAllTemplate(){
+    public static ArrayList<String> getAllTemplate(){
         return allTemplates;
     }
 
-    public static String getRandom(String optional) {
+    public static String getRandom() {
         int intRandom = (int) (Math.floor(Math.random() * allTemplates.size()));
         return allTemplates.get(intRandom);
     }
 
-    public void getFromFile() {
+    private static void getFromFile() {
         try {
             BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/templates/templates.txt"));
             while (br.ready()) allTemplates.add(br.readLine());

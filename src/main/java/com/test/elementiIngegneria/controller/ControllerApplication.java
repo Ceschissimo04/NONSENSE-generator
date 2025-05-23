@@ -52,10 +52,7 @@ public class ControllerApplication {
 
         // If the template is set to "default", a random template is selected
         if (template.equals("default")) {
-            Template templates = new Template();
-            // Non no se sia utilizzabile in maniera statica perché per poter funzionare
-            // deve caricare da file dal costruttore
-            template = templates.getRandom(null);
+            template = Template.getRandom();
         }
 
         // Generate the NonSense sentences
@@ -92,6 +89,7 @@ public class ControllerApplication {
         model.addAttribute("syntaxTree", result);
         model.addAttribute("nonsenseResult", "Your nonsense sentence will appear here ...");
         model.addAttribute("extractedWords", Analyzer.getPartsOfText(sentence, "en"));
+        Querier.getToxicityScore(sentence);
         return "index";
     }
 

@@ -28,17 +28,25 @@ public class Verbs implements Word {
     } */
 
     @Override
+    public String getRandom() {
+        int intRandom = (int) (Math.floor(Math.random() * keys.size()));
+        String key = keys.get(intRandom);
+
+        String[] values = allVerbs.get(key);
+        return values[0];
+    }
+
     public String getRandom(String optional) {
         int intRandom = (int) (Math.floor(Math.random() * keys.size()));
         String key = keys.get(intRandom);
 
         String[] values = allVerbs.get(key);
         switch (optional) {
-            case "presente":
+            case "present":
                 return values[0];
-            case "passato":
+            case "past":
                 return values[1];
-            case "futuro":
+            case "future":
                 return values[2];
             default:
                 return key;

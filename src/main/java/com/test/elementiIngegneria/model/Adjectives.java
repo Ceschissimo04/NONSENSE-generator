@@ -14,7 +14,7 @@ public class Adjectives implements Word {
     }
 
     @Override
-    public String getRandom(String optional) {
+    public String getRandom() {
         int intRandom = (int) (Math.floor(Math.random() * allAdjectives.size()));
         return allAdjectives.get(intRandom);
     }

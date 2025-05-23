@@ -22,68 +22,75 @@ public class Generator {
         // controlla se la frase è vuota
         if (sentence == null || sentence.isEmpty()) {
             return null;
-        } else {
-
-            // TODO: randomizzare le parole sugli array
-
-            elements = Analyzer.getElementsOfText(sentence, "en");
-            for (String[] s : elements) {
-                String partOfSpeech = s[1];
-                switch (partOfSpeech) {
-                    case "NOUN":
-                        nouns.add(s[0]);
-                        break;
-                    case "ADJ":
-                        adjectives.add(s[0]);
-                        break;
-                    case "VERB":
-                        verbs.add(s[0]);
-                        break;
-                    default:
-                        // handle other cases if needed
-                        break;
-                }
-            }
-
         }
 
+        elements = Analyzer.getElementsOfTextLemma(sentence, ControllerApplication.DEFAULT_LANGUAGE);
+        for (String[] s : elements) {
+            String partOfSpeech = s[1];
+            switch (partOfSpeech) {
+                case "NOUN":
+                    nouns.add(s[0]);
+                    break;
+                case "ADJ":
+                    adjectives.add(s[0]);
+                    break;
+                case "VERB":
+                    verbs.add(s[0]);
+                    break;
+                default:
+                    // handle other cases if needed
+                    break;
+            }
+        }
+
+        java.util.Collections.shuffle(nouns);
+        java.util.Collections.shuffle(adjectives);
+        java.util.Collections.shuffle(verbs);
+
+        String currentSentence = template;
         // Simplify the template
         ArrayList<String> simplifiedTemplate = Template.extractBracketWords(template);
 
-        // TODO: Potrei aver notato errori a volte negli inserimenti di parole in
-        // eccesso, controllare
         while (!nouns.isEmpty() || !adjectives.isEmpty() || !verbs.isEmpty()) {
-            String currentSentence = template;
             System.out.println("Current template: " + template);
             // ========Fill template=========
-            for (String s : simplifiedTemplate) {
-                if (s.equals("noun")) {
-                    if (!nouns.isEmpty()) {
-                        currentSentence = replaceFirstBracketWord(currentSentence, nouns.get(0));
-                        nouns.remove(0);
-                    } else {
-                        currentSentence = replaceFirstBracketWord(currentSentence, nounsObj.getRandom(""));
-                    }
-                } else if (s.equals("adjective")) {
-                    if (!adjectives.isEmpty()) {
-                        currentSentence = replaceFirstBracketWord(currentSentence, adjectives.get(0));
-                        adjectives.remove(0);
-                    } else {
-                        currentSentence = replaceFirstBracketWord(currentSentence, adjectivesObj.getRandom(""));
-                    }
-                } else if (s.equals("verb")) {
-                    // TODO: Manca la logica per i verbi
-                    if (!verbs.isEmpty()) {
-                        currentSentence = replaceFirstBracketWord(currentSentence, verbs.get(0));
-                        verbs.remove(0);
-                    } else {
-                        currentSentence = replaceFirstBracketWord(currentSentence, verbsObj.getRandom(tense));
-                    }
+            for (String currentType : simplifiedTemplate) {
+                String currentWord = "";
+                switch (currentType) {
+                    case "noun":
+                        if (!nouns.isEmpty()) {
+                            currentWord = nouns.get(0);
+                            nouns.remove(0);
+                        } else {
+                            currentWord = nounsObj.getRandom();
+                        }
+                        break;
+                    case "adjective":
+                        if (!adjectives.isEmpty()) {
+                            currentWord = adjectives.get(0);
+                            adjectives.remove(0);
+                        } else {
+                            currentWord = adjectivesObj.getRandom();
+                        }
+                        break;
+                    case "verb":
+                        if (!verbs.isEmpty()) {
+                            currentWord = verbs.get(0);
+                            verbs.remove(0);
+                        } else {
+                            currentWord = verbsObj.getRandom(tense);
+                        }
+                        break;
+                    default:
+                        break;
                 }
+                currentSentence = replaceFirstBracketWord(currentSentence, currentWord);
             }
             sentences.add(currentSentence);
 
-            simplifiedTemplate = Template.extractBracketWords(Template.getRandom(template));
+            template = Template.getRandom();
+            simplifiedTemplate = Template.extractBracketWords(template);
+            currentSentence = template;
         }
 
         return sentences;
