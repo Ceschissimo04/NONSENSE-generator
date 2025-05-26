@@ -1,7 +1,0 @@
-Sentence: cat lays on the floor
-Template: A [noun] [verb] the [adjective] [noun]
-Tense: present
-
-Generated Sentences
-A floor lay the woeful cat
----------------------------------------------------------------------------

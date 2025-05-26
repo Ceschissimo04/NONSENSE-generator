@@ -21,14 +21,11 @@ public class ControllerApplication {
 
     @GetMapping("/")
     public String Controller(Model model) {
-        // TODO: cambia questa parte usando la classe template
-        try {
-            model.addAttribute("templateList", loadTemplate("src/main/resources/static/templates/templates.txt"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "error";
-        }
 
+        // Load static list of templates got from file
+        model.addAttribute("templateList", Template.getAllTemplate());
+
+        // Set form attributes
         model.addAttribute("syntaxTree", "The tree will appear here...");
         model.addAttribute("nonsenseResult", "Your nonsense sentence will appear here ...");
         model.addAttribute("extractedWords", "The template will appear here...");
@@ -44,22 +41,15 @@ public class ControllerApplication {
             @RequestParam("tense") String tense,
             Model model) {
 
-        // Pass the results to the page index.html
-        // model.addAttribute("nonsenseResult", nonsense);
+        // Set form attributes
         model.addAttribute("inputSentence", sentence);
         model.addAttribute("selectedTense", tense);
         model.addAttribute("syntaxTree", "The tree will appear here...");
         model.addAttribute("extractedWords", "The template will appear here...");
         model.addAttribute("selectedTemplate", template);
 
-        // TODO: cambia questa parte usando la classe template
-        try {
-            model.addAttribute("templateList", loadTemplate("src/main/resources/static/templates/templates.txt"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "error";
-        }
-
+        // Load static list of templates got from file
+        model.addAttribute("templateList", Template.getAllTemplate());
 
         // If the template is set to "default", a random template is selected
         if (template.equals("default")) {
@@ -67,23 +57,23 @@ public class ControllerApplication {
         }
 
         // Generate the NonSense sentences
-            ArrayList<String[]> elements;
-            try {
-                elements = ApiHandler.getInstance().getElementsOfTextLemma(sentence);
-            } catch (IOException e) {
-                // TODO: gestire eccezioni
-                e.printStackTrace();
-                return "error";
-            }
-            catch (Exception e){
-                // TODO: gestire eccezioni
-                // qui sarebbe da gestire le eccezioni che vengono sollevate
-                // quando l'api di google non funziona
-                e.printStackTrace();
-                return "error";
-            }
-        
-        // TODO: pensare a cosa fare se l'utente non inserisce nessun verb, nessun noun e nessuno adj
+        ArrayList<String[]> elements;
+        try {
+            elements = ApiHandler.getInstance().getElementsOfTextLemma(sentence);
+        } catch (IOException e) {
+            // TODO: gestire eccezioni
+            e.printStackTrace();
+            return "error";
+        } catch (Exception e) {
+            // TODO: gestire eccezioni
+            // qui sarebbe da gestire le eccezioni che vengono sollevate
+            // quando l'api di google non funziona
+            e.printStackTrace();
+            return "error";
+        }
+
+        // TODO: pensare a cosa fare se l'utente non inserisce nessun verb, nessun noun
+        // e nessuno adj
         ArrayList<String> generated = Generator.generateSentences(elements, template, tense);
         if (generated != null && !generated.isEmpty()) {
             StringBuilder sb = new StringBuilder();
@@ -91,7 +81,7 @@ public class ControllerApplication {
                 sb.append(s).append("<br>");
             }
             model.addAttribute("nonsenseResult", sb.toString());
-            
+
             // Save to the file generated.txt the generated NonSense sentences
             try {
                 HistoryHandler.updateHistory(generated);
@@ -107,9 +97,13 @@ public class ControllerApplication {
     @PostMapping("/analyze")
     public String analyze(
             @RequestParam("sentence") String sentence,
+            @RequestParam("template") String template,
+            @RequestParam("tense") String tense,
             Model model) {
 
         model.addAttribute("inputSentence", sentence);
+        model.addAttribute("selectedTense", tense);
+        model.addAttribute("selectedTemplate", template);
 
         TreeNode root = null;
         String sentenceTemplate = null;
@@ -126,24 +120,22 @@ public class ControllerApplication {
         model.addAttribute("nonsenseResult", "Your nonsense sentence will appear here ...");
         model.addAttribute("extractedWords", sentenceTemplate);
         // ApiHandler.getToxicityScore(sentence);
-        
-        // TODO: cambia questa parte usando la classe template
-        try {
-            model.addAttribute("templateList", loadTemplate("src/main/resources/static/templates/templates.txt"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "error";
-        }
+
+        // Load static list of templates got from file
+        model.addAttribute("templateList", Template.getAllTemplate());
+
         return "index";
     }
 
-    private ArrayList<String> loadTemplate(String path) throws IOException {
-        ArrayList<String> templateList = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader(path));
-        while (br.ready())
-            templateList.add(br.readLine());
-        br.close();
-        return templateList;
-    }
+    /*
+     * private ArrayList<String> loadTemplate(String path) throws IOException {
+     * ArrayList<String> templateList = new ArrayList<>();
+     * BufferedReader br = new BufferedReader(new FileReader(path));
+     * while (br.ready())
+     * templateList.add(br.readLine());
+     * br.close();
+     * return templateList;
+     * }
+     */
 
 }
