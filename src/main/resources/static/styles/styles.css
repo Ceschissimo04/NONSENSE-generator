@@ -113,7 +113,8 @@ button:hover {
   border: 1px solid #eee;
   border-radius: 8px;
   min-height: 80px;
-  overflow: scroll;
+  max-height: 200px;
+  overflow: auto;
 }
 
 .input-row {

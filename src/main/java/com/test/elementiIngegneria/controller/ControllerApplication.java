@@ -1,7 +1,5 @@
 package com.test.elementiIngegneria.controller;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -39,17 +37,19 @@ public class ControllerApplication {
             @RequestParam("sentence") String sentence,
             @RequestParam("template") String template,
             @RequestParam("tense") String tense,
+            @RequestParam(name = "showSyntaxTree", defaultValue = "false") boolean showSyntaxTree,
+            @RequestParam(name = "saveToFile", defaultValue = "false") boolean saveToFile,
             Model model) {
 
-        // Set form attributes
+        // Refresh page parameters
         model.addAttribute("inputSentence", sentence);
         model.addAttribute("selectedTense", tense);
+        model.addAttribute("showSyntaxTree", showSyntaxTree);
+        model.addAttribute("saveToFile", saveToFile);
+        model.addAttribute("templateList", Template.getAllTemplate());
+        model.addAttribute("selectedTemplate", template);
         model.addAttribute("syntaxTree", "The tree will appear here...");
         model.addAttribute("extractedWords", "The template will appear here...");
-        model.addAttribute("selectedTemplate", template);
-
-        // Load static list of templates got from file
-        model.addAttribute("templateList", Template.getAllTemplate());
 
         // If the template is set to "default", a random template is selected
         if (template.equals("default")) {
@@ -91,6 +91,25 @@ public class ControllerApplication {
             }
         }
 
+        // Set syntax tree only if checkbox setted
+        String syntaxTreeString = "";
+        TreeNode root = null;
+        if (showSyntaxTree && !generated.isEmpty()) {
+            for(String s: generated){
+                try {
+                    root = ApiHandler.getInstance().getSyntaxTree(s);
+                    syntaxTreeString += Utilities.generateTreeHTML(root) + "\n\n";
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "error";
+                }
+            }
+            model.addAttribute("syntaxTree", syntaxTreeString);
+        }
+        else{
+            model.addAttribute("syntaxTree", "The syntax tree will appear here...");
+        }
+
         return "index";
     }
 
@@ -99,11 +118,18 @@ public class ControllerApplication {
             @RequestParam("sentence") String sentence,
             @RequestParam("template") String template,
             @RequestParam("tense") String tense,
+            @RequestParam(name = "showSyntaxTree", defaultValue = "false") boolean showSyntaxTree,
+            @RequestParam(name = "saveToFile", defaultValue = "false") boolean saveToFile,
             Model model) {
 
+        // Refresh page parameters
         model.addAttribute("inputSentence", sentence);
         model.addAttribute("selectedTense", tense);
+        model.addAttribute("showSyntaxTree", showSyntaxTree);
+        model.addAttribute("saveToFile", saveToFile);
+        model.addAttribute("templateList", Template.getAllTemplate());
         model.addAttribute("selectedTemplate", template);
+        model.addAttribute("nonsenseResult", "Your nonsense sentence will appear here ...");
 
         TreeNode root = null;
         String sentenceTemplate = null;
@@ -115,27 +141,20 @@ public class ControllerApplication {
             return "error";
         }
 
-        String syntaxTreeString = Utilities.generateTreeHTML(root);
-        model.addAttribute("syntaxTree", syntaxTreeString);
-        model.addAttribute("nonsenseResult", "Your nonsense sentence will appear here ...");
+        // Set syntax tree only if checkbox setted
+        String syntaxTreeString;
+        if (showSyntaxTree) {
+            syntaxTreeString = Utilities.generateTreeHTML(root);
+            model.addAttribute("syntaxTree", syntaxTreeString);
+        }
+        else{
+            model.addAttribute("syntaxTree", "The syntax tree will appear here...");
+        }
+
         model.addAttribute("extractedWords", sentenceTemplate);
         // ApiHandler.getToxicityScore(sentence);
 
-        // Load static list of templates got from file
-        model.addAttribute("templateList", Template.getAllTemplate());
-
         return "index";
     }
-
-    /*
-     * private ArrayList<String> loadTemplate(String path) throws IOException {
-     * ArrayList<String> templateList = new ArrayList<>();
-     * BufferedReader br = new BufferedReader(new FileReader(path));
-     * while (br.ready())
-     * templateList.add(br.readLine());
-     * br.close();
-     * return templateList;
-     * }
-     */
 
 }

@@ -82,6 +82,7 @@ public class Generator {
             }
             sentences.add(currentSentence);
 
+            // TODO: quando si sceglie il template dalla select non va preso random ma va mantenuto lo stesso; passare un flag nella funzione?
             template = Template.getRandom();
             simplifiedTemplate = Template.extractBracketWords(template);
             currentSentence = template;
