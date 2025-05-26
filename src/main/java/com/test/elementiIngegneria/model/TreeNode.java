@@ -2,16 +2,16 @@ package com.test.elementiIngegneria.model;
 
 import java.util.ArrayList;
 
-public class Node {
+public class TreeNode {
     private String name;
-    private ArrayList<Node> children;
+    private ArrayList<TreeNode> children;
 
-    public Node() {
+    public TreeNode() {
         this.name = "";
         this.children = new ArrayList<>();
     }
 
-    public Node(String name) {
+    public TreeNode(String name) {
         this.name = name;
         this.children = new ArrayList<>();
     }
@@ -24,11 +24,11 @@ public class Node {
         return name;
     }
 
-    public ArrayList<Node> getChildren() {
+    public ArrayList<TreeNode> getChildren() {
         return children;
     }
 
-    public void addChild(Node child) {
+    public void addChild(TreeNode child) {
         this.children.add(child);
     }
 }

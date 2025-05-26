@@ -1,0 +1,19 @@
+add words button (gui and implementation)
+checkbox for syntaxtree (gui and implementation)
+add random tense in select (gui and implementation)
+(optional)print all syntax trees for every generate sentence
+toxicity:
+    -choose toxic categories (ex: health is not toxic, so don't consider it)
+    -analyze every generated sentence
+    -pick maximum confidence
+    -if higher than treshold (50% or whatever):
+        -print it's toxic and why it is toxic
+    -else print it's safe
+    -do this for every generated sentence
+(optional)scrollboxes in output areas
+sentence history:
+    -every generated sentence is saved to file
+    -add button to print history in generated sentence output area
+    -(optional)print toxicity (decide if we save it on file on generation or if we calculate on the fly)
+choose how to handle exceptions and problems
+

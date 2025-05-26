@@ -6,25 +6,19 @@ import com.test.elementiIngegneria.model.Adjectives;
 import com.test.elementiIngegneria.model.Nouns;
 import com.test.elementiIngegneria.model.Template;
 import com.test.elementiIngegneria.model.Verbs;
+import com.test.elementiIngegneria.utility.Utilities;
 
 public class Generator {
-    public ArrayList<String> generateStrings(String sentence, String template, String tense) {
+    public static ArrayList<String> generateSentences(ArrayList<String[]> elements, String template, String tense) {
         // 3 liste (1 nouns, 1 adjectives, 1 verbs)
         ArrayList<String> nouns = new ArrayList<>();
         ArrayList<String> adjectives = new ArrayList<>();
         ArrayList<String> verbs = new ArrayList<>();
         ArrayList<String> sentences = new ArrayList<>();
-        ArrayList<String[]> elements = new ArrayList<>();
         Nouns nounsObj = new Nouns();
         Adjectives adjectivesObj = new Adjectives();
         Verbs verbsObj = new Verbs();
 
-        // controlla se la frase è vuota
-        if (sentence == null || sentence.isEmpty()) {
-            return null;
-        }
-
-        elements = Analyzer.getElementsOfTextLemma(sentence, ControllerApplication.DEFAULT_LANGUAGE);
         for (String[] s : elements) {
             String partOfSpeech = s[1];
             switch (partOfSpeech) {
@@ -84,7 +78,7 @@ public class Generator {
                     default:
                         break;
                 }
-                currentSentence = replaceFirstBracketWord(currentSentence, currentWord);
+                currentSentence = Utilities.replaceFirstBracketWord(currentSentence, currentWord);
             }
             sentences.add(currentSentence);
 
@@ -94,11 +88,5 @@ public class Generator {
         }
 
         return sentences;
-    }
-
-    public static String replaceFirstBracketWord(String input, String replacement) {
-        if (input == null)
-            return null;
-        return input.replaceFirst("\\[[^\\]]+\\]", replacement);
     }
 }
