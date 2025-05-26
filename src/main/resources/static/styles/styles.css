@@ -19,7 +19,7 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   padding: 2rem 1rem;
-  max-width: 700px;
+  max-width: 1000px;
   width: 100%;
   margin: 2rem auto;
   display: flex;
@@ -116,6 +116,85 @@ button:hover {
   overflow: scroll;
 }
 
+.input-row {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  width: 100%;
+}
+
+.input-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.input-left {
+  flex: 7;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+}
+
+.input-left textarea {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 200px;
+  height: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.input-right {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background: #fff; /* Cambiato da #f7faff a bianco */
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.input-right select {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.button-row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.button-row button {
+  flex: 1 1 180px;
+  min-width: 120px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  background: #4a90e2;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10);
+  transition: background 0.2s;
+}
+
+.button-row button:hover {
+  background: #3576b8;
+}
+
 /* Responsive */
 @media (max-width: 700px) {
   .container {
@@ -139,6 +218,26 @@ button:hover {
   .flex-row>* {
     min-width: 100%;
     flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .input-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .input-left, .input-right {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+  .input-right {
+    margin-top: 0.5rem;
+    padding: 0.7rem;
+  }
+  .button-row {
+    flex-direction: column;
+    gap: 0.7rem;
+    align-items: stretch;
   }
 }
 

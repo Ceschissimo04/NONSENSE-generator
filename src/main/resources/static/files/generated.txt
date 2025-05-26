@@ -1,9 +1,7 @@
-Sentence: random words go flying fast this eat pasta pizza crunchy mozzarella 
-Template: The [noun] [verb] the [adjective] [noun]
+Sentence: cat lays on the floor
+Template: A [noun] [verb] the [adjective] [noun]
 Tense: present
 
 Generated Sentences
-The word fly the random mozzarella
-After the pizza, the pasta go the crunchy will
-The block eat an respectful arm
+A floor lay the woeful cat
 ---------------------------------------------------------------------------

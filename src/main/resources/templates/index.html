@@ -14,23 +14,39 @@
     <h1>NONSENSE Sentence Generator</h1>
     <div class="main-content">
       <div class="input-section">
-        <form action="/generate" method="post">
-          <label for="inputSentence">Enter a sentence:</label>
-          <textarea id="inputSentence" name="sentence" placeholder="Type your sentence here..." required
-            th:text="${inputSentence}"></textarea>
-          <div class="flex-row">
-            <select id="templateSelect" name="template" th:value="${selectedTemplate}">
-              <option value="default" th:selected="${selectedTemplate} == 'default'">Random Template</option>
-              <option th:each="template: ${templateList}" th:selected="${selectedTemplate} == ${template}"
-                th:value="${template}" th:text="${template}"></option>
-            </select>
-            <select id="tenseSelect" name="tense" th:value="${selectedTense}">
-              <option value="present" th:selected="${selectedTense} == 'present'">Present</option>
-              <option value="past" th:selected="${selectedTense} == 'past'">Past</option>
-              <option value="future" th:selected="${selectedTense} == 'future'">Future</option>
-            </select>
+        <form action="/generate" method="post" class="input-form">
+          <div class="input-row">
+            <div class="input-left">
+              <label for="inputSentence">Enter a sentence:</label>
+              <textarea id="inputSentence" name="sentence" placeholder="Type a sentence or type some words..." required
+                th:text="${inputSentence}"></textarea>
+            </div>
+            <div class="input-right">
+              <select id="templateSelect" name="template" th:value="${selectedTemplate}">
+                <option value="default" th:selected="${selectedTemplate} == 'default'">Random Template</option>
+                <option th:each="template: ${templateList}" th:selected="${selectedTemplate} == ${template}"
+                  th:value="${template}" th:text="${template}"></option>
+              </select>
+              <select id="tenseSelect" name="tense" th:value="${selectedTense}">
+                <option value="default" th:selected="${selectedTense} == 'default'">Random Tense</option>
+                <option value="present" th:selected="${selectedTense} == 'present'">Present</option>
+                <option value="past" th:selected="${selectedTense} == 'past'">Past</option>
+                <option value="future" th:selected="${selectedTense} == 'future'">Future</option>
+              </select>
+              <div class="checkbox-row">
+                <input type="checkbox" id="showSyntaxTree" name="showSyntaxTree" th:checked="${showSyntaxTree}">
+                <label for="showSyntaxTree">Show Syntax Tree</label>
+              </div>
+              <div class="checkbox-row">
+                <input type="checkbox" id="saveToFile" name="saveToFile" th:checked="${saveToFile}">
+                <label for="saveToFile">Save to file</label>
+              </div>
+            </div>
+          </div>
+          <div class="button-row">
             <button type="submit" id="analyzeBtn" formaction="/analyze">Analyze Structure</button>
             <button type="submit" id="generateBtn" formaction="/generate">Generate Nonsense</button>
+            <button type="submit" id="addToDictionaryBtn" formaction="/add">Add to dictionary</button>
           </div>
         </form>
       </div>
