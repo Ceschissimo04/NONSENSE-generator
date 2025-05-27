@@ -1,5 +1,6 @@
 package com.test.elementiIngegneria.controller;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
@@ -9,6 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.test.elementiIngegneria.model.Dictionary;
 import com.test.elementiIngegneria.model.Template;
 import com.test.elementiIngegneria.model.TreeNode;
@@ -219,8 +223,6 @@ public class ControllerApplication {
             e.printStackTrace();
             return "error";
         }
-
-                model.addAttribute("templateList", Template.getAllTemplate());
 
         // Set form attributes
         model.addAttribute("templateList", Template.getAllTemplate());

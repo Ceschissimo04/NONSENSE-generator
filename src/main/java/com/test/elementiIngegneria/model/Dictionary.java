@@ -4,10 +4,13 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 import com.test.elementiIngegneria.utility.Pair;
 
 public class Dictionary {
@@ -99,13 +102,45 @@ public class Dictionary {
             String word = pair.getFirst();
             String type = pair.getSecond();
             if (type.equals("NOUN")) {
-                nouns.add(new Noun(word));
+                Noun flag = new Noun(word);
+                if (!nouns.contains(flag))
+                    nouns.add(flag);
             } else if (type.equals("ADJ")) {
-                adjs.add(new Adjective(word));
+                Adjective flag = new Adjective(word);
+                if (!adjs.contains(flag))
+                    adjs.add(flag);
             } else if (type.equals("VERB")) {
-                verbs.add(new Verb(word));
+                Verb flag = (Verb) getVerbFromString(word);
+                if (!verbs.contains(flag))
+                    verbs.add(addVerb(flag.getWord()));
             }
         }
+    }
+
+    private Verb addVerb(String verb) {
+        Gson gson = new Gson();
+
+        try (JsonReader reader = new JsonReader(
+                new FileReader("src/main/resources/static/files/verbs_with_conjugations.json"))) {
+            reader.beginArray();
+
+            while (reader.hasNext()) {
+                VerbJsonData data = gson.fromJson(reader, VerbJsonData.class);
+                if (data.infinitive != null && data.infinitive.contains(verb)) {
+                    String present = data.indicative.get("present").get(0);
+                    String past = data.indicative.get("perfect").get(0);
+                    String future = data.indicative.get("future").get(0);
+                    return new Verb(verb, present, past, future);
+                }
+            }
+
+            reader.endArray(); // Fine array
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public Word getVerbFromString(String verb) {
@@ -115,5 +150,15 @@ public class Dictionary {
             }
         }
         return new Verb(verb);
+    }
+
+    private class VerbJsonData {
+        public List<String> infinitive;
+        public List<String> participle;
+        public List<String> gerund;
+        public Map<String, List<String>> indicative;
+        public Map<String, List<String>> subjuntive;
+        public Map<String, List<String>> conditional;
+        public List<String> imperative;
     }
 }

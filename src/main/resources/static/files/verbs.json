@@ -78,6 +78,7 @@
   "fry": ["fries", "fried", "will fry"],
   "attract": ["attracts", "attracted", "will attract"],
   "whip": ["whips", "whipped", "will whip"],
+  "wait": ["waits", "waited", "will wait"],
   "connect": ["connects", "connected", "will connect"],
   "play": ["plays", "played", "will play"],
   "balance": ["balances", "balanced", "will balance"],
