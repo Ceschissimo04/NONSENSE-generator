@@ -67,32 +67,34 @@ public class Generator {
                         }
                         break;
                     case "verb":
+                        Verb v = null;
                         if (!verbs.isEmpty()) {
-                            currentWord = verbs.get(0);
+                            // look for conjugation in the dictionary
+                            v = (Verb) Dictionary.getInstance().getVerbFromString(verbs.get(0));
                             verbs.remove(0);
                         } else {
-                            Verb v = (Verb) Dictionary.getInstance().getRandomVerb();
-                            if (!v.has_conjugations()) {
-                                currentWord = v.getWord();
-                            } else {
-                                if (tense == null || tense.isEmpty() || tense.equals("default")) {
-                                    String[] tenses = { "present", "past", "future" };
-                                    tense = tenses[(int) (Math.random() * tenses.length)];
-                                }
-                                switch (tense.toLowerCase()) {
-                                    case "present":
-                                        currentWord = v.getPresentTense();
-                                        break;
-                                    case "past":
-                                        currentWord = v.getPastTense();
-                                        break;
-                                    case "future":
-                                        currentWord = v.getFutureTense();
-                                        break;
-                                    default:
-                                        currentWord = v.getWord();
-                                        break;
-                                }
+                            v = (Verb) Dictionary.getInstance().getRandomVerb();
+                        }
+                        if (!v.has_conjugations()) {
+                            currentWord = v.getWord();
+                        } else {
+                            if (tense == null || tense.isEmpty() || tense.equals("default")) {
+                                String[] tenses = { "present", "past", "future" };
+                                tense = tenses[(int) (Math.random() * tenses.length)];
+                            }
+                            switch (tense.toLowerCase()) {
+                                case "present":
+                                    currentWord = v.getPresentTense();
+                                    break;
+                                case "past":
+                                    currentWord = v.getPastTense();
+                                    break;
+                                case "future":
+                                    currentWord = v.getFutureTense();
+                                    break;
+                                default:
+                                    currentWord = v.getWord();
+                                    break;
                             }
                         }
                         break;

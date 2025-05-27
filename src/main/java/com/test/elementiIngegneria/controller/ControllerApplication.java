@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.test.elementiIngegneria.model.Dictionary;
 import com.test.elementiIngegneria.model.Template;
 import com.test.elementiIngegneria.model.TreeNode;
 import com.test.elementiIngegneria.utility.Pair;
@@ -152,7 +153,8 @@ public class ControllerApplication {
             for (String s : list)
                 output += s + "<br>";
         }
-        
+
+        model.addAttribute("templateList", Template.getAllTemplate());
         model.addAttribute("outputTitle", "History");
         model.addAttribute("nonsenseResult", output);
         model.addAttribute("syntaxTree", "The tree will appear here...");
@@ -208,28 +210,26 @@ public class ControllerApplication {
 
     @PostMapping("/add")
     public String addDictionary(@RequestParam("sentence") String sentence,
-            Model model){
+            Model model) {
 
-        String partOfText = null;
+        List<Pair<String, String>> words;
         try {
-            partOfText = ApiHandler.getInstance().getPartsOfText(sentence);
+            words = ApiHandler.getInstance().getElementsOfTextLemma(sentence);
         } catch (IOException e) {
             e.printStackTrace();
             return "error";
         }
-                
-        
-         switch (partOfText) {
-                case "NOUN":
-                    break;
-                case "ADJ":
-                    break;
-                case "VERB":
-                    break;
-                default:
-                    // handle other cases if needed
-                    break;
-            }
+
+                model.addAttribute("templateList", Template.getAllTemplate());
+
+        // Set form attributes
+        model.addAttribute("templateList", Template.getAllTemplate());
+        model.addAttribute("syntaxTree", "The tree will appear here...");
+        model.addAttribute("nonsenseResult", "Your nonsense sentence will appear here ...");
+        model.addAttribute("extractedWords", "The template will appear here...");
+        model.addAttribute("outputTitle", "Generated Nonsense Sentence");
+
+        Dictionary.getInstance().addWords(words);
 
         return "index";
     }

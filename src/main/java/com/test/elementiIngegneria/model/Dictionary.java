@@ -16,6 +16,9 @@ public class Dictionary {
     private List<Word> nouns;
     private List<Word> adjs;
     private List<Word> verbs;
+    private static final String NOUNS_FILE_PATH = "src/main/resources/static/files/nouns.txt";
+    private static final String ADJECTIVES_FILE_PATH = "src/main/resources/static/files/adjs.txt";
+    private static final String VERBS_FILE_PATH = "src/main/resources/static/files/better_verbs.json";
 
     private Dictionary() {
         nouns = new java.util.ArrayList<>();
@@ -33,7 +36,7 @@ public class Dictionary {
     }
 
     public void loadAllVerbs() {
-        try (FileReader reader = new FileReader("src/main/resources/static/files/verbs.json")) {
+        try (FileReader reader = new FileReader(VERBS_FILE_PATH)) {
             JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
             for (String key : json.keySet()) {
                 JsonArray arr = json.getAsJsonArray(key);
@@ -50,7 +53,7 @@ public class Dictionary {
 
     public void loadAllNouns() {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/files/nouns.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(NOUNS_FILE_PATH));
             while (br.ready())
                 nouns.add(new Noun(br.readLine()));
             br.close();
@@ -61,7 +64,7 @@ public class Dictionary {
 
     public void loadAllAdjs() {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/files/adjs.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(ADJECTIVES_FILE_PATH));
             while (br.ready())
                 adjs.add(new Adjective(br.readLine()));
             br.close();
@@ -95,13 +98,22 @@ public class Dictionary {
         for (Pair<String, String> pair : wordsList) {
             String word = pair.getFirst();
             String type = pair.getSecond();
-            if (type.equals("noun")) {
+            if (type.equals("NOUN")) {
                 nouns.add(new Noun(word));
-            } else if (type.equals("adj")) {
+            } else if (type.equals("ADJ")) {
                 adjs.add(new Adjective(word));
-            } else if (type.equals("verb")) {
+            } else if (type.equals("VERB")) {
                 verbs.add(new Verb(word));
             }
         }
+    }
+
+    public Word getVerbFromString(String verb) {
+        for (Word w : verbs) {
+            if (w.getWord().equals(verb)) {
+                return w;
+            }
+        }
+        return new Verb(verb);
     }
 }

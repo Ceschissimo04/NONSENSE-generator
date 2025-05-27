@@ -23,7 +23,6 @@ public class ApiHandler {
         apiKey = ApiKeyLoader.getApiKey(API_KEY_FILE);
     }
 
-    // TODO: controllare che sta roba sia fatta bene
     public static ApiHandler getInstance() throws IOException {
         if (INSTANCE == null) {
             INSTANCE = new ApiHandler();
