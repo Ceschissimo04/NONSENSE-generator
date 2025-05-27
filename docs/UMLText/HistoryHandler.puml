@@ -1,0 +1,13 @@
+@startuml 
+actor User
+
+User -> GUI: Click "Show History" 
+GUI -> ControllerApplication: getHistory() 
+ControllerApplication -> HistoryHandler: fetchHistory() 
+HistoryHandler -> FileManager: readHistoryFile() 
+FileManager --> HistoryHandler: List<String> historyEntries 
+HistoryHandler --> ControllerApplication: List<String> historyEntries
+ControllerApplication -> GUI: Display historyEntries 
+GUI --> User: Show history list 
+
+@enduml

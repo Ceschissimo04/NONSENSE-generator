@@ -25,10 +25,18 @@
 
 2. **Build and run the application**:
 
+    **windows user**
    ```bash
-   ./mvnw clean install
-   ./mvnw spring-boot:run
+   .\mvnw clean install
+   .\mvnw spring-boot:run
    ```
+
+   **linux and macOS user**
+   ```bash
+   mvn clean install
+   mvn spring-boot:run
+   ```
+   
 
 
 ## 3. Runtime Environment and Constraints

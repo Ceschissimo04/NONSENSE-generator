@@ -1,0 +1,90 @@
+@startuml
+
+actor User 
+boundary GUI 
+control ControllerApplication 
+entity Generator 
+entity ApiHandler 
+entity SyntaxApiHandler
+entity ToxicityApiHandler
+entity Utilities
+database Dictionary 
+
+User -> GUI: Insert text and request generation 
+GUI -> ControllerApplication: POST/generate(sentence, template, tense, ...) 
+ControllerApplication -> ApiHandler: getElementsOfTextLemma(sentence) 
+ApiHandler -> SyntaxApiHandler: Call Syntax API (sentence)
+SyntaxApiHandler --> ApiHandler: JSON response 
+ApiHandler --> ControllerApplication: List<Pair<String, String>>
+ControllerApplication -> Generator: generateSentences(elements, template, tense) 
+Generator -> Dictionary: getRandomNoun()/getRandomVerb()/getRandomAdj() 
+Dictionary --> Generator: Word(s) 
+Generator --> ControllerApplication: List<String> (generated sentences)
+ControllerApplication -> ApiHandler: getToxicityScoreList(generated sentences) 
+ApiHandler -> ToxicityApiHandler: Call Toxicity API (for each sentence) 
+ToxicityApiHandler --> ApiHandler: JSON response(s) 
+ApiHandler --> ControllerApplication: List<Pair<String, Integer>> (toxicity scores)
+ControllerApplication -> GUI: Show generated sentences and toxicity scores 
+GUI --> User: Display results 
+
+
+User -> GUI: Insert sentence and request analyzation
+GUI -> ControllerApplication: POST/analyze(sentence, template, tense, showSyntaxTree, saveToFile) 
+ControllerApplication -> ApiHandler: getPartsOfText(sentence) 
+ApiHandler --> ControllerApplication: sentenceTemplate 
+ControllerApplication -> ApiHandler: getSyntaxTree(sentence) 
+ApiHandler --> ControllerApplication: TreeNode root 
+ControllerApplication -> Utilities: generateTreeHTML(root)
+Utilities --> ControllerApplication: syntaxTreeString 
+ControllerApplication -> GUI: Show syntaxTree
+ControllerApplication -> GUI: Show sentenceTemplate  ("Generated Nonsense Sentence") 
+GUI --> User: Display results 
+
+@enduml
+
+@startuml 
+actor User 
+boundary GUI 
+control ControllerApplication 
+entity ApiHandler 
+entity Generator 
+entity Dictionary 
+entity Utilities 
+database ExternalAPI
+
+== Sentence Analysis ==
+
+User -> GUI: Click "Analyze" 
+GUI -> ControllerApplication: POST/analyze(sentence, template, tense, showSyntaxTree, saveToFile) 
+ControllerApplication -> ApiHandler: getPartsOfText(sentence) 
+ApiHandler --> ControllerApplication: sentenceTemplate 
+ControllerApplication -> ApiHandler: getSyntaxTree(sentence) 
+ApiHandler --> ControllerApplication: TreeNode root 
+ControllerApplication -> Utilities: generateTreeHTML(root) 
+Utilities --> ControllerApplication: syntaxTreeString 
+ControllerApplication -> GUI: Display sentenceTemplate, syntaxTreeString
+GUI -> User: show sentenceTemplate, syntaxTreeString
+
+== Sentence Generation ==
+
+User -> GUI: Click "Generate" 
+GUI -> ControllerApplication: POST/generate(sentence, template, tense) 
+ControllerApplication -> ApiHandler: getElementsOfTextLemma(sentence) 
+ApiHandler -> ExternalAPI: Call Syntax API (sentence) 
+ExternalAPI --> ApiHandler: JSON response 
+ApiHandler --> ControllerApplication: List<Pair<String, String>> 
+ControllerApplication -> Generator: generateSentences(elements, template, tense) 
+Generator -> Dictionary: getRandomWord(type) 
+Dictionary --> Generator: word 
+Generator --> ControllerApplication: List<String> generatedSentences 
+ControllerApplication -> GUI: Display generatedSentences
+
+== Toxicity Analysis ==
+
+ControllerApplication -> ApiHandler: getToxicityScoreList(generatedSentences) 
+ApiHandler -> ExternalAPI: Call Toxicity API (for each sentence) 
+ExternalAPI --> ApiHandler: JSON response(s) 
+ApiHandler --> ControllerApplication: List<Pair<String, Integer>> toxicityScores 
+ControllerApplication -> GUI: Display toxicityScores
+
+@enduml
