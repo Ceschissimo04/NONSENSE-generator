@@ -3,24 +3,27 @@ package com.test.elementiIngegneria.model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.test.elementiIngegneria.utility.Pair;
 
 public class Dictionary {
 
     private static Dictionary INSTANCE;
-    private List<String> allNouns;
-    private HashMap<String, String[]> allVerbs;
-    private ArrayList<String> keys;
-    private List<String> allAdjs;
+    private List<Word> nouns;
+    private List<Word> adjs;
+    private List<Word> verbs;
 
     private Dictionary() {
-
+        nouns = new java.util.ArrayList<>();
+        adjs = new java.util.ArrayList<>();
+        verbs = new java.util.ArrayList<>();
+        loadAllNouns();
+        loadAllAdjs();
+        loadAllVerbs();
     }
 
     public static Dictionary getInstance() {
@@ -38,8 +41,7 @@ public class Dictionary {
                 for (int i = 0; i < arr.size(); i++) {
                     values[i] = arr.get(i).getAsString();
                 }
-                allVerbs.put(key, values);
-                keys.add(key);
+                verbs.add(new Verb(key, values[0], values[1], values[2]));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,7 +52,7 @@ public class Dictionary {
         try {
             BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/files/nouns.txt"));
             while (br.ready())
-                allNouns.add(br.readLine());
+                nouns.add(new Noun(br.readLine()));
             br.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,11 +63,45 @@ public class Dictionary {
         try {
             BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/files/adjs.txt"));
             while (br.ready())
-                allAdjs.add(br.readLine());
+                adjs.add(new Adjective(br.readLine()));
             br.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public Word getRandomNoun() {
+        if (nouns.isEmpty())
+            return null;
+        int idxRandom = (int) (Math.floor(Math.random() * nouns.size()));
+        return nouns.get(idxRandom);
+    }
+
+    public Word getRandomAdj() {
+        if (adjs.isEmpty())
+            return null;
+        int idxRandom = (int) (Math.floor(Math.random() * adjs.size()));
+        return adjs.get(idxRandom);
+    }
+
+    public Word getRandomVerb() {
+        if (verbs.isEmpty())
+            return null;
+        int idxRandom = (int) (Math.floor(Math.random() * verbs.size()));
+        return verbs.get(idxRandom);
+    }
+
+    public void addWords(List<Pair<String, String>> wordsList) {
+        for (Pair<String, String> pair : wordsList) {
+            String word = pair.getFirst();
+            String type = pair.getSecond();
+            if (type.equals("noun")) {
+                nouns.add(new Noun(word));
+            } else if (type.equals("adj")) {
+                adjs.add(new Adjective(word));
+            } else if (type.equals("verb")) {
+                verbs.add(new Verb(word));
+            }
+        }
+    }
 }

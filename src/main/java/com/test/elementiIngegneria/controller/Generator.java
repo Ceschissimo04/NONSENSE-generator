@@ -3,10 +3,9 @@ package com.test.elementiIngegneria.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.test.elementiIngegneria.model.Adjectives;
-import com.test.elementiIngegneria.model.Nouns;
+import com.test.elementiIngegneria.model.Dictionary;
 import com.test.elementiIngegneria.model.Template;
-import com.test.elementiIngegneria.model.Verbs;
+import com.test.elementiIngegneria.model.Verb;
 import com.test.elementiIngegneria.utility.Pair;
 import com.test.elementiIngegneria.utility.Utilities;
 
@@ -17,9 +16,6 @@ public class Generator {
         List<String> adjectives = new ArrayList<>();
         List<String> verbs = new ArrayList<>();
         List<String> sentences = new ArrayList<>();
-        Nouns nounsObj = new Nouns();
-        Adjectives adjectivesObj = new Adjectives();
-        Verbs verbsObj = new Verbs();
 
         for (Pair<String, String> s : elements) {
             String partOfSpeech = s.getSecond();
@@ -47,6 +43,7 @@ public class Generator {
         // Simplify the template
         List<String> simplifiedTemplate = Template.extractBracketWords(template);
 
+        // TODO: refactor della parte dei verbi
         while (!nouns.isEmpty() || !adjectives.isEmpty() || !verbs.isEmpty()) {
             System.out.println("Current template: " + template);
             // ========Fill template=========
@@ -58,7 +55,7 @@ public class Generator {
                             currentWord = nouns.get(0);
                             nouns.remove(0);
                         } else {
-                            currentWord = nounsObj.getRandom();
+                            currentWord = Dictionary.getInstance().getRandomNoun().getWord();
                         }
                         break;
                     case "adjective":
@@ -66,7 +63,7 @@ public class Generator {
                             currentWord = adjectives.get(0);
                             adjectives.remove(0);
                         } else {
-                            currentWord = adjectivesObj.getRandom();
+                            currentWord = Dictionary.getInstance().getRandomAdj().getWord();
                         }
                         break;
                     case "verb":
@@ -74,7 +71,29 @@ public class Generator {
                             currentWord = verbs.get(0);
                             verbs.remove(0);
                         } else {
-                            currentWord = verbsObj.getRandom(tense);
+                            Verb v = (Verb) Dictionary.getInstance().getRandomVerb();
+                            if (!v.has_conjugations()) {
+                                currentWord = v.getWord();
+                            } else {
+                                if (tense == null || tense.isEmpty() || tense.equals("default")) {
+                                    String[] tenses = { "present", "past", "future" };
+                                    tense = tenses[(int) (Math.random() * tenses.length)];
+                                }
+                                switch (tense.toLowerCase()) {
+                                    case "present":
+                                        currentWord = v.getPresentTense();
+                                        break;
+                                    case "past":
+                                        currentWord = v.getPastTense();
+                                        break;
+                                    case "future":
+                                        currentWord = v.getFutureTense();
+                                        break;
+                                    default:
+                                        currentWord = v.getWord();
+                                        break;
+                                }
+                            }
                         }
                         break;
                     default:
@@ -84,7 +103,8 @@ public class Generator {
             }
             sentences.add(currentSentence);
 
-            // TODO: quando si sceglie il template dalla select non va preso random ma va mantenuto lo stesso; passare un flag nella funzione?
+            // TODO: quando si sceglie il template dalla select non va preso random ma va
+            // mantenuto lo stesso; passare un flag nella funzione?
             template = Template.getRandom();
             simplifiedTemplate = Template.extractBracketWords(template);
             currentSentence = template;

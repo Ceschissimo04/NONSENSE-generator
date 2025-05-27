@@ -1,6 +1,5 @@
 package com.test.elementiIngegneria.controller;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
 
@@ -151,12 +150,12 @@ public class ControllerApplication {
             output = "History is empty";
         else {
             for (String s : list)
-                output += s + "\n";
+                output += s + "<br>";
         }
+        
         model.addAttribute("outputTitle", "History");
         model.addAttribute("nonsenseResult", output);
         model.addAttribute("syntaxTree", "The tree will appear here...");
-        model.addAttribute("nonsenseResult", "Your history will appear here ...");
         model.addAttribute("extractedWords", "The template will appear here...");
 
         return "index";
@@ -207,13 +206,19 @@ public class ControllerApplication {
         return "index";
     }
 
-    @PostMapping("/add");
+    @PostMapping("/add")
     public String addDictionary(@RequestParam("sentence") String sentence,
             Model model){
 
-        String partOfText = ApiHandler.getInstance().getPartsOfText(sentence);
+        String partOfText = null;
+        try {
+            partOfText = ApiHandler.getInstance().getPartsOfText(sentence);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "error";
+        }
                 
-
+        
          switch (partOfText) {
                 case "NOUN":
                     break;
