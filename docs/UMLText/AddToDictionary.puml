@@ -1,0 +1,19 @@
+@startuml 
+actor User
+
+User -> GUI: Select dictionary file and click "Add" 
+GUI -> ControllerApplication: addDictionary(sentence) 
+
+ControllerApplication -> ApiHandler: getElementsOfTextLemma(sentence) 
+ApiHandler -> syntaxApiHandler: Call Syntax API (sentence) 
+syntaxApiHandler --> ApiHandler: JSON response 
+ApiHandler --> ControllerApplication: List<Pair<String, String>> words
+
+ControllerApplication -> Dictionary: addWords(words) 
+Dictionary -> FileManager: saveDictionaryFile(words) 
+FileManager --> Dictionary: confirmation/success 
+Dictionary --> ControllerApplication: confirmation/success 
+ControllerApplication -> GUI: Show success or error message 
+GUI --> User: Display result 
+
+@enduml

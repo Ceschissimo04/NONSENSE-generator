@@ -1,0 +1,25 @@
+@startuml 
+actor User
+
+User -> GUI: Click "Analyze Structure" (with sentence, template, tense, showSyntaxTree, saveToFile) 
+GUI -> ControllerApplication: POST /analyze(sentence, template, tense, showSyntaxTree, saveToFile) 
+ControllerApplication -> ApiHandler: getPartsOfText(sentence) 
+
+'da vedere se tenere questa parte
+ApiHandler -> syntaxApiHandler: Call Syntax API(sentence)
+syntaxApiHandler -> ApiHandler: JSON response
+
+ApiHandler --> ControllerApplication: sentenceTemplate
+ControllerApplication -> ApiHandler: getSyntaxTree(sentence) 
+ApiHandler --> ControllerApplication: TreeNode root 
+alt showSyntaxTree == true 
+  ControllerApplication -> Utilities: generateTreeHTML(root) 
+  Utilities --> ControllerApplication: syntaxTreeString 
+  ControllerApplication -> GUI: Display syntaxTreeString 
+else showSyntaxTree == false 
+  ControllerApplication -> GUI: Display "The syntax tree will appear here..." 
+  end 
+ControllerApplication -> GUI: Display sentenceTemplate 
+GUI -> User: Show result
+
+@enduml

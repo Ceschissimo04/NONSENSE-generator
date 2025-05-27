@@ -1,0 +1,9 @@
+@startuml
+
+'non c'è la parte di controllo se la frase generataa è tossica
+ControllerApplication -> ApiHandler: getToxicityScoreList(generatedSentences) 
+ApiHandler -> ToxicityApiHandler: Call Toxicity API (for each sentence) 
+ToxicityApiHandler --> ApiHandler: JSON response(s) 
+ApiHandler --> ControllerApplication: List<Pair<String, Integer>> toxicityScores 
+
+@enduml
