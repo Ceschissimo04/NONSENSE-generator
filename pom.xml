@@ -83,7 +83,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<mainClass>com.NONSENSE-generator\src\main\java\com\test\elementiIngegneria\ElementiIngegneriaApplication.java</mainClass>
+					<mainClass>com.NONSENSE-generator\src\main\java\com\test\elementiIngegneria\Main.java</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>

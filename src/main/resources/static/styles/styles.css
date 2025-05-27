@@ -173,6 +173,7 @@ button:hover {
 
 .button-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   width: 100%;
   justify-content: flex-end;
@@ -180,7 +181,7 @@ button:hover {
 
 .button-row button {
   flex: 1 1 180px;
-  min-width: 120px;
+  min-width: 100px;
   padding: 0.7rem 1.2rem;
   font-size: 1rem;
   border-radius: 8px;
@@ -212,7 +213,7 @@ button:hover {
   }
 
   .flex-row {
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.5rem;
   }
 
@@ -236,9 +237,8 @@ button:hover {
     padding: 0.7rem;
   }
   .button-row {
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.7rem;
-    align-items: stretch;
   }
 }
 

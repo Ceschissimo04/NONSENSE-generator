@@ -1,5 +1,6 @@
 package com.test.elementiIngegneria.controller;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class ControllerApplication {
         model.addAttribute("syntaxTree", "The tree will appear here...");
         model.addAttribute("nonsenseResult", "Your nonsense sentence will appear here ...");
         model.addAttribute("extractedWords", "The template will appear here...");
+        model.addAttribute("outputTitle", "Generated Nonsense Sentence");
 
         return "index";
     }
@@ -53,6 +55,7 @@ public class ControllerApplication {
         model.addAttribute("selectedTemplate", template);
         model.addAttribute("syntaxTree", "The tree will appear here...");
         model.addAttribute("extractedWords", "The template will appear here...");
+        model.addAttribute("outputTitle", "Generated Nonsense Sentence");
 
         // If the template is set to "default", a random template is selected
         if (template.equals("default")) {
@@ -80,10 +83,9 @@ public class ControllerApplication {
         List<String> generated = Generator.generateSentences(elements, template, tense);
         List<Pair<String, Integer>> toxicityScores = null;
         if (generated != null && !generated.isEmpty()) {
-            try{
+            try {
                 toxicityScores = ApiHandler.getInstance().getToxicityScoreList(generated);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 return "error";
             }
@@ -98,12 +100,15 @@ public class ControllerApplication {
             model.addAttribute("nonsenseResult", sb.toString());
 
             // Save to the file generated.txt the generated NonSense sentences
-            try {
-                HistoryHandler.updateHistory(generated);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return "error";
+            if (saveToFile) {
+                try {
+                    HistoryHandler.updateHistory(generated);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "error";
+                }
             }
+
         }
 
         // Set syntax tree only if checkbox setted
@@ -123,6 +128,36 @@ public class ControllerApplication {
         } else {
             model.addAttribute("syntaxTree", "The syntax tree will appear here...");
         }
+
+        return "index";
+    }
+
+    @PostMapping("/history")
+    public String history(Model model) {
+
+        String output = "";
+
+        List<String> list = null;
+
+        try {
+            list = HistoryHandler.readHistory();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return "error";
+        }
+
+        if (list.isEmpty())
+            output = "History is empty";
+        else {
+            for (String s : list)
+                output += s + "\n";
+        }
+        model.addAttribute("outputTitle", "History");
+        model.addAttribute("nonsenseResult", output);
+        model.addAttribute("syntaxTree", "The tree will appear here...");
+        model.addAttribute("nonsenseResult", "Your history will appear here ...");
+        model.addAttribute("extractedWords", "The template will appear here...");
 
         return "index";
     }
@@ -166,6 +201,30 @@ public class ControllerApplication {
 
         model.addAttribute("extractedWords", sentenceTemplate);
         // ApiHandler.getToxicityScore(sentence);
+
+        model.addAttribute("outputTitle", "Generated Nonsense Sentence");
+
+        return "index";
+    }
+
+    @PostMapping("/add");
+    public String addDictionary(@RequestParam("sentence") String sentence,
+            Model model){
+
+        String partOfText = ApiHandler.getInstance().getPartsOfText(sentence);
+                
+
+         switch (partOfText) {
+                case "NOUN":
+                    break;
+                case "ADJ":
+                    break;
+                case "VERB":
+                    break;
+                default:
+                    // handle other cases if needed
+                    break;
+            }
 
         return "index";
     }

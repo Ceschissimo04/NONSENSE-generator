@@ -17,8 +17,7 @@
         <form action="/generate" method="post" class="input-form">
           <div class="input-row">
             <div class="input-left">
-              <textarea id="inputSentence" name="sentence" placeholder="Type a sentence or type some words..." required
-                th:text="${inputSentence}"></textarea>
+              <textarea id="inputSentence" name="sentence" placeholder="Type a sentence or type some words..." th:text="${inputSentence}"></textarea>
             </div>
             <div class="input-right">
               <select id="templateSelect" name="template" th:value="${selectedTemplate}">
@@ -46,22 +45,22 @@
             <button type="submit" id="analyzeBtn" formaction="/analyze">Analyze Structure</button>
             <button type="submit" id="generateBtn" formaction="/generate">Generate Nonsense</button>
             <button type="submit" id="addToDictionaryBtn" formaction="/add">Add to dictionary</button>
+            <button type="submit" id="showHistory" formaction="/history" >Show History</button>
           </div>
         </form>
       </div>
       <div class="output-section">
         <div class="card">
+          <h2 th:text="${outputTitle}"></h2>
+          <div class="output-area" id="nonsenseResult" th:utext="${nonsenseResult}">Your nonsense sentence will appear here ...</div>
+        </div>
+        <div class="card">
           <h2>Syntax Tree</h2>
           <div class="output-area" id="syntaxTree" th:utext="${syntaxTree}" >The tree will appear here...</div>
-          
         </div>
         <div class="card">
           <h2>Parts of Speech Extraction</h2>
           <div class="output-area" id="extractedWords" th:utext="${extractedWords}">The template will appear here...</div>
-        </div>
-        <div class="card">
-          <h2>Generated Nonsense Sentence</h2>
-          <div class="output-area" id="nonsenseResult" th:utext="${nonsenseResult}">Your nonsense sentence will appear here ...</div>
         </div>
       </div>
     </div>
