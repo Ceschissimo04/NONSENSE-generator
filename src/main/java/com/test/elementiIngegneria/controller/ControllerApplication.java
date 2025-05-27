@@ -1,7 +1,7 @@
 package com.test.elementiIngegneria.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.test.elementiIngegneria.model.Template;
 import com.test.elementiIngegneria.model.TreeNode;
+import com.test.elementiIngegneria.utility.Pair;
 import com.test.elementiIngegneria.utility.Utilities;
 
 @Controller
 public class ControllerApplication {
     public static final String DEFAULT_LANGUAGE = "en";
+    public static final double TOXICITY_THRESHOLD = 0.5; // probability value below which a sentence is considere
+                                                         // non-toxic
 
     @GetMapping("/")
     public String Controller(Model model) {
@@ -57,7 +60,7 @@ public class ControllerApplication {
         }
 
         // Generate the NonSense sentences
-        ArrayList<String[]> elements;
+        List<Pair<String, String>> elements;
         try {
             elements = ApiHandler.getInstance().getElementsOfTextLemma(sentence);
         } catch (IOException e) {
@@ -74,11 +77,23 @@ public class ControllerApplication {
 
         // TODO: pensare a cosa fare se l'utente non inserisce nessun verb, nessun noun
         // e nessuno adj
-        ArrayList<String> generated = Generator.generateSentences(elements, template, tense);
+        List<String> generated = Generator.generateSentences(elements, template, tense);
+        List<Pair<String, Integer>> toxicityScores = null;
         if (generated != null && !generated.isEmpty()) {
+            try{
+                toxicityScores = ApiHandler.getInstance().getToxicityScoreList(generated);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                return "error";
+            }
             StringBuilder sb = new StringBuilder();
-            for (String s : generated) {
-                sb.append(s).append("<br>");
+            // generated and toxicityScores should have the same size
+            for (int i = 0; i < generated.size(); i++) {
+                String sentenceGenerated = generated.get(i);
+                Pair<String, Integer> toxicityScore = toxicityScores.get(i);
+                sb.append(sentenceGenerated).append(" [").append(toxicityScore.getFirst())
+                        .append("] (").append(toxicityScore.getSecond()).append("%)<br>");
             }
             model.addAttribute("nonsenseResult", sb.toString());
 
@@ -94,8 +109,8 @@ public class ControllerApplication {
         // Set syntax tree only if checkbox setted
         String syntaxTreeString = "";
         TreeNode root = null;
-        if (showSyntaxTree && !generated.isEmpty()) {
-            for(String s: generated){
+        if (showSyntaxTree && generated != null && !generated.isEmpty()) {
+            for (String s : generated) {
                 try {
                     root = ApiHandler.getInstance().getSyntaxTree(s);
                     syntaxTreeString += Utilities.generateTreeHTML(root) + "\n\n";
@@ -105,8 +120,7 @@ public class ControllerApplication {
                 }
             }
             model.addAttribute("syntaxTree", syntaxTreeString);
-        }
-        else{
+        } else {
             model.addAttribute("syntaxTree", "The syntax tree will appear here...");
         }
 
@@ -146,8 +160,7 @@ public class ControllerApplication {
         if (showSyntaxTree) {
             syntaxTreeString = Utilities.generateTreeHTML(root);
             model.addAttribute("syntaxTree", syntaxTreeString);
-        }
-        else{
+        } else {
             model.addAttribute("syntaxTree", "The syntax tree will appear here...");
         }
 

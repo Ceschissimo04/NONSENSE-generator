@@ -2,11 +2,13 @@ package com.test.elementiIngegneria.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.test.elementiIngegneria.model.TreeNode;
+import com.test.elementiIngegneria.utility.Pair;
 import com.test.elementiIngegneria.utility.Utilities;
 
 public class ApiHandler {
@@ -21,8 +23,8 @@ public class ApiHandler {
         apiKey = ApiKeyLoader.getApiKey(API_KEY_FILE);
     }
 
-    // TODO: controllare che sta roba abbia sia fatta bene
-    public static synchronized ApiHandler getInstance() throws IOException {
+    // TODO: controllare che sta roba sia fatta bene
+    public static ApiHandler getInstance() throws IOException {
         if (INSTANCE == null) {
             INSTANCE = new ApiHandler();
         }
@@ -74,9 +76,9 @@ public class ApiHandler {
     }
 
     // nome da cambiare
-    public ArrayList<String[]> getElementsOfTextLemma(String text) {
+    public List<Pair<String, String>> getElementsOfTextLemma(String text) {
         JSONObject json = SyntaxApiHandler.SyntaxQuery(text, apiKey);
-        ArrayList<String[]> result = new ArrayList<>();
+        List<Pair<String, String>> result = new ArrayList<>();
         JSONArray tokens = json.getJSONArray("tokens");
         for (int i = 0; i < tokens.length(); i++) {
             JSONObject token = tokens.getJSONObject(i);
@@ -84,13 +86,46 @@ public class ApiHandler {
             String partOfSpeech = token.getJSONObject("partOfSpeech").getString("tag");
 
             if (partOfSpeech.equals("NOUN") || partOfSpeech.equals("VERB") || partOfSpeech.equals("ADJ")) {
-                result.add(new String[] { lemma, partOfSpeech });
+                result.add(new Pair<>(lemma, partOfSpeech));
             }
         }
         return result;
     }
 
-    public void getToxicityScore(String sentence) {
-        // implementation here
+    public Pair<String, Integer> getToxicityScore(String sentence) {
+        JSONObject json = ToxicityApiHandler.toxicityQuery(sentence, apiKey);
+        if (json == null) {
+            // TODO: gestire eccezioni
+            return new Pair<>("Error in API call", -1);
+        }
+
+        JSONArray categories = json.getJSONArray("moderationCategories");
+        String detectedCategory = "Valid";
+        double highestConfidence = 0;
+
+        for (int i = 0; i < categories.length(); i++) {
+            JSONObject category = categories.getJSONObject(i);
+            String categoryName = category.getString("name");
+            double categoryScore = category.getDouble("confidence");
+
+            if (categoryScore > highestConfidence) {
+                highestConfidence = categoryScore;
+                detectedCategory = categoryName;
+            }
+        }
+
+        if (highestConfidence < ControllerApplication.TOXICITY_THRESHOLD) {
+            return new Pair<>("Valid", (int) ((1 - highestConfidence) * 100));
+        }
+        return new Pair<>(detectedCategory, (int) (highestConfidence * 100));
+    }
+
+    public List<Pair<String, Integer>> getToxicityScoreList(List<String> sentences) {
+        List<Pair<String, Integer>> results = new ArrayList<>();
+        for (String sentence : sentences) {
+            Pair<String, Integer> result = getToxicityScore(sentence);
+            results.add(new Pair<>(result.getFirst(), result.getSecond()));
+        }
+        return results;
     }
 }

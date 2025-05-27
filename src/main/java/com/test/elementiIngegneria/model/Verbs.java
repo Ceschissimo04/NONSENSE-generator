@@ -33,7 +33,8 @@ public class Verbs implements Word {
         String key = keys.get(intRandom);
 
         String[] values = allVerbs.get(key);
-        return values[0];
+        int tenseRandom = (int) (Math.floor(Math.random() * 3)); // 0: present, 1: past, 2: future
+        return values[tenseRandom];
     }
 
     public String getRandom(String optional) {

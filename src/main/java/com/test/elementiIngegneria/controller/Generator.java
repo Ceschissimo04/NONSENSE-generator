@@ -1,35 +1,37 @@
 package com.test.elementiIngegneria.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.test.elementiIngegneria.model.Adjectives;
 import com.test.elementiIngegneria.model.Nouns;
 import com.test.elementiIngegneria.model.Template;
 import com.test.elementiIngegneria.model.Verbs;
+import com.test.elementiIngegneria.utility.Pair;
 import com.test.elementiIngegneria.utility.Utilities;
 
 public class Generator {
-    public static ArrayList<String> generateSentences(ArrayList<String[]> elements, String template, String tense) {
+    public static List<String> generateSentences(List<Pair<String, String>> elements, String template, String tense) {
         // 3 liste (1 nouns, 1 adjectives, 1 verbs)
-        ArrayList<String> nouns = new ArrayList<>();
-        ArrayList<String> adjectives = new ArrayList<>();
-        ArrayList<String> verbs = new ArrayList<>();
-        ArrayList<String> sentences = new ArrayList<>();
+        List<String> nouns = new ArrayList<>();
+        List<String> adjectives = new ArrayList<>();
+        List<String> verbs = new ArrayList<>();
+        List<String> sentences = new ArrayList<>();
         Nouns nounsObj = new Nouns();
         Adjectives adjectivesObj = new Adjectives();
         Verbs verbsObj = new Verbs();
 
-        for (String[] s : elements) {
-            String partOfSpeech = s[1];
+        for (Pair<String, String> s : elements) {
+            String partOfSpeech = s.getSecond();
             switch (partOfSpeech) {
                 case "NOUN":
-                    nouns.add(s[0]);
+                    nouns.add(s.getFirst());
                     break;
                 case "ADJ":
-                    adjectives.add(s[0]);
+                    adjectives.add(s.getFirst());
                     break;
                 case "VERB":
-                    verbs.add(s[0]);
+                    verbs.add(s.getFirst());
                     break;
                 default:
                     // handle other cases if needed
@@ -43,7 +45,7 @@ public class Generator {
 
         String currentSentence = template;
         // Simplify the template
-        ArrayList<String> simplifiedTemplate = Template.extractBracketWords(template);
+        List<String> simplifiedTemplate = Template.extractBracketWords(template);
 
         while (!nouns.isEmpty() || !adjectives.isEmpty() || !verbs.isEmpty()) {
             System.out.println("Current template: " + template);
