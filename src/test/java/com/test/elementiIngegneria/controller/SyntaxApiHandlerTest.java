@@ -4,6 +4,8 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedConstruction;
 
+import com.test.elementiIngegneria.controller.*;
+
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;

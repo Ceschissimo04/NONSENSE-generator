@@ -236,6 +236,7 @@ public class ControllerApplication {
             if (showSyntaxTree) {
                 syntaxTreeString = Utilities.generateTreeHTML(root);
                 model.addAttribute("syntaxTree", syntaxTreeString);
+                System.out.println("Syntax Tree: " + syntaxTreeString);
             }
 
             model.addAttribute("extractedWords", sentenceTemplate);

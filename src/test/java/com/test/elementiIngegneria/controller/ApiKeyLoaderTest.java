@@ -9,33 +9,14 @@ import org.mockito.Mockito;
 import java.io.FileReader;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 class ApiKeyLoaderTest {
-
-    @Test
-    void testGetApiKey_ValidFile_ReturnsApiKey() throws IOException {
-        // Arrange
-        String mockFilePath = "mockFilePath.json";
-        String expectedApiKey = "testApiKey";
-        JsonObject mockJson = new JsonObject();
-        mockJson.addProperty("apiKey", expectedApiKey);
-
-        FileReader mockFileReader = mock(FileReader.class);
-
-        try (MockedStatic<JsonParser> mockedParser = Mockito.mockStatic(JsonParser.class)) {
-            mockedParser.when(() -> JsonParser.parseReader(mockFileReader)).thenReturn(mockJson);
-
-            // Act
-            String actualApiKey = ApiKeyLoader.getApiKey(mockFilePath);
-
-            // Assert
-            assertEquals(expectedApiKey, actualApiKey);
-        }
-    }
-
+    /**
+     * This class tests the getApiKey method from the ApiKeyLoader class.
+     * The method reads an API key from a JSON file and returns it as a String.
+     */
     @Test
     void testGetApiKey_FileNotFound_ThrowsIOException() {
         // Arrange

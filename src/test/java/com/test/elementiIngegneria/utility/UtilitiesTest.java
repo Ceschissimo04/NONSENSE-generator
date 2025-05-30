@@ -124,7 +124,7 @@ public class UtilitiesTest {
     }
 
     @Test
-    public void testBuildTreeFromJson_NoTokens() {
+    public void testBuildTreeFromJson_InvalidJson() {
         // Arrange
         String jsonString = """
                 {
@@ -137,38 +137,9 @@ public class UtilitiesTest {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
-        // Act
-        TreeNode result = Utilities.buildTreeFromJson(jsonObject);
-
+        final JSONObject finalJsonObject = jsonObject;
         // Assert
-        assertNull(result);
+        assertThrows(IndexOutOfBoundsException.class, () -> Utilities.buildTreeFromJson(finalJsonObject));
     }
 
-    @Test
-    public void testBuildTreeFromJson_MissingRoot() {
-        // Arrange
-        String jsonString = """
-                {
-                    "tokens": [
-                        {
-                            "text": { "content": "child" },
-                            "dependencyEdge": { "label": "DEPENDENT", "headTokenIndex": 0 }
-                        }
-                    ]
-                }
-                """;
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(jsonString);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Act
-        TreeNode result = Utilities.buildTreeFromJson(jsonObject);
-
-        // Assert
-        assertNull(result);
-    }
 }

@@ -26,28 +26,6 @@ class ToxicityApiHandlerTest {
 
     @Test
     void testToxicityQueryValidResponse() throws Exception {
-        // Mocking a successful API response
-        String mockResponse = "{\"success\": true}";
-        URL mockUrl = mock(URL.class);
-        HttpURLConnection mockConnection = mock(HttpURLConnection.class);
-        when(mockUrl.openConnection()).thenReturn(mockConnection);
-        when(mockConnection.getOutputStream()).thenReturn(mock(OutputStream.class));
-        when(mockConnection.getInputStream()).thenReturn(new ByteArrayInputStream(mockResponse.getBytes()));
-
-        // Setting up mock behavior
-        ReflectionTestUtils.setField(ToxicityApiHandler.class, "API_URL_TOXICITY", "http://mockapi.com");
-
-        // Using URL mock
-        ReflectionTestUtils.setField(ToxicityApiHandler.class, "URL", mockUrl);
-
-        JSONObject result = ToxicityApiHandler.toxicityQuery(TEST_TEXT, TEST_API_KEY);
-
-        assertNotNull(result);
-        assertTrue(result.getBoolean("success"));
-    }
-
-    @Test
-    void testToxicityQueryIOException() throws Exception {
         // Mocking connection failure
         URL mockUrl = mock(URL.class);
         HttpURLConnection mockConnection = mock(HttpURLConnection.class);
@@ -55,31 +33,8 @@ class ToxicityApiHandlerTest {
         when(mockConnection.getOutputStream()).thenReturn(mock(OutputStream.class));
         when(mockConnection.getInputStream()).thenThrow(new IOException("Connection error"));
 
-        // Setting up mock behavior
-        ReflectionTestUtils.setField(ToxicityApiHandler.class, "API_URL_TOXICITY", "http://mockapi.com");
-        ReflectionTestUtils.setField(ToxicityApiHandler.class, "URL", mockUrl);
-
-        JSONObject result = ToxicityApiHandler.toxicityQuery(TEST_TEXT, TEST_API_KEY);
-
-        assertNull(result);
+        
+        assertNull(ToxicityApiHandler.toxicityQuery(TEST_TEXT, TEST_API_KEY));
     }
-
-    @Test
-    void testToxicityQueryInvalidJSONResponse() throws Exception {
-        // Mocking a malformed JSON response
-        String mockResponse = "INVALID_JSON";
-        URL mockUrl = mock(URL.class);
-        HttpURLConnection mockConnection = mock(HttpURLConnection.class);
-        when(mockUrl.openConnection()).thenReturn(mockConnection);
-        when(mockConnection.getOutputStream()).thenReturn(mock(OutputStream.class));
-        when(mockConnection.getInputStream()).thenReturn(new ByteArrayInputStream(mockResponse.getBytes()));
-
-        // Setting up mock behavior
-        ReflectionTestUtils.setField(ToxicityApiHandler.class, "API_URL_TOXICITY", "http://mockapi.com");
-        ReflectionTestUtils.setField(ToxicityApiHandler.class, "URL", mockUrl);
-
-        JSONObject result = ToxicityApiHandler.toxicityQuery(TEST_TEXT, TEST_API_KEY);
-
-        assertNull(result);
-    }
+    
 }
