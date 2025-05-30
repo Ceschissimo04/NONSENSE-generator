@@ -1,0 +1,133 @@
+@startuml
+
+' ==== MODEL ====
+'package "model" {
+    abstract class Word {
+        - word: String
+        - type: String
+        + getWord(): String
+        + getType(): String
+    }
+    class Noun
+    class Verb {
+        - present_tense: String
+        - past_tense: String
+        - future_tense: String
+        + getPresentTense(): String
+        + getPastTense(): String
+        + getFutureTense(): String
+        + has_conjugations(): boolean
+    }
+    class Adjective
+    class Dictionary {
+        + getInstance(): Dictionary
+        + loadAllNouns()
+        + loadAllAdjs()
+        + loadAllVerbs()
+        + getRandomNoun(): Word
+        + getRandomAdj(): Word
+        + getRandomVerb(): Word
+        + addWords(List<Pair<String, String>>)
+        + getVerbFromString(String): Word
+    }
+    class Template {
+        + getAllTemplate(): ArrayList<String>
+        + getRandom(): String
+        + extractBracketWords(String): ArrayList<String>
+    }
+
+    Noun --|> Word
+    Verb --|> Word
+    Adjective --|> Word
+    'Dictionary --> Noun
+    'Dictionary --> Verb
+    'Dictionary --> Adjective
+    Dictionary --o Word
+'}
+
+' ==== CONTROLLER ====
+'package "controller" {
+    class ControllerApplication {
+        + generaNonsense(...)
+        + analyze(...)
+        + addDictionary(...)
+        + history(...)
+    }
+    class ApiHandler {
+        + getInstance()
+        + getSyntaxTree(String): TreeNode
+        + getPartsOfText(String): String
+        + getElementsOfText(String): ArrayList<String[]>
+        + getElementsOfTextLemma(String): List<Pair<String, String>>
+        + getToxicityScore(String): Pair<String, Integer>
+        + getToxicityScoreList(List<String>): List<Pair<String, Integer>>
+    }
+    class Generator {
+        + generateSentences(List<Pair<String, String>>, String, String): List<String>
+    }
+    class HistoryHandler { 
+        - HISTORY_FILE : String 
+        + updateHistory(sentences : List<String>) : void 
+        + readHistory() : List<String> 
+    }
+    class SyntaxApiHandler {
+        - API_URL_SYNTAX : String
+        + SyntaxQuery(text : String, apiKey : String) : JSONObject
+    }
+    class ToxicityApiHandler {
+    - API_URL_TOXICITY : String
+    + toxicityQuery(text : String, apiKey : String) : JSONObject
+}
+'}
+
+' ==== UTILITY ====
+'package "utility" {
+    class Utilities {
+        + buildTreeFromJson(JSONObject): TreeNode
+        + generateTreeHTML(TreeNode): String
+        + replaceFirstBracketWord(String, String): String
+    }
+    class Pair<K, V> {
+        + getFirst(): K
+        + getSecond(): V
+    }
+        class TreeNode {
+        - name: String
+        - children: ArrayList<TreeNode>
+        + setName(String)
+        + getName(): String
+        + getChildren(): ArrayList<TreeNode>
+        + addChild(TreeNode)
+    }
+'}
+
+' ==== RELATIONSHIPS ====
+ControllerApplication --> ApiHandler
+ControllerApplication --> Generator
+ControllerApplication ..> HistoryHandler : uses
+'ControllerApplication --> Dictionary
+'ControllerApplication --> Template
+'ControllerApplication --> Utilities
+'ControllerApplication --> TreeNode
+'ControllerApplication --> Pair
+
+ApiHandler --> Utilities
+ApiHandler --> TreeNode
+ApiHandler --> Pair
+ApiHandler --> Dictionary
+ApiHandler --> SyntaxApiHandler : uses
+ApiHandler --> ToxicityApiHandler : uses
+
+Generator --> Dictionary
+Generator --> Template
+Generator --> Utilities
+Generator --> Pair
+Generator --> Verb
+
+Dictionary --> Pair
+
+'Template --> Pair
+
+Utilities --> TreeNode
+
+@enduml
