@@ -7,8 +7,8 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.test.elementiIngegneria.model.TreeNode;
 import com.test.elementiIngegneria.utility.Pair;
+import com.test.elementiIngegneria.utility.TreeNode;
 import com.test.elementiIngegneria.utility.Utilities;
 
 public class ApiHandler {

@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.test.elementiIngegneria.model.TreeNode;
-
 public class Utilities {
     public static TreeNode buildTreeFromJson(JSONObject json) {
         JSONArray tokens = json.getJSONArray("tokens");

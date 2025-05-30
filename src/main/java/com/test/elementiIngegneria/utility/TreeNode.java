@@ -1,4 +1,4 @@
-package com.test.elementiIngegneria.model;
+package com.test.elementiIngegneria.utility;
 
 import java.util.ArrayList;
 

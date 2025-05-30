@@ -16,8 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.test.elementiIngegneria.model.Dictionary;
 import com.test.elementiIngegneria.model.Template;
-import com.test.elementiIngegneria.model.TreeNode;
 import com.test.elementiIngegneria.utility.Pair;
+import com.test.elementiIngegneria.utility.TreeNode;
 import com.test.elementiIngegneria.utility.Utilities;
 
 @Controller
