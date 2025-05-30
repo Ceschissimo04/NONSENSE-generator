@@ -1,9 +1,5 @@
 package com.test.elementiIngegneria.controller;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
@@ -12,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.test.elementiIngegneria.model.Dictionary;
 import com.test.elementiIngegneria.model.Template;
@@ -52,86 +47,81 @@ public class ControllerApplication {
             Model model) {
 
         // Refresh page parameters
-        model.addAttribute("inputSentence", sentence);
-        model.addAttribute("selectedTense", tense);
-        model.addAttribute("showSyntaxTree", showSyntaxTree);
-        model.addAttribute("saveToFile", saveToFile);
-        model.addAttribute("templateList", Template.getAllTemplate());
-        model.addAttribute("selectedTemplate", template);
         model.addAttribute("syntaxTree", "The tree will appear here...");
         model.addAttribute("extractedWords", "The template will appear here...");
+        model.addAttribute("nonsenseResult", "Your nonsense sentence will appear here ...");
         model.addAttribute("outputTitle", "Generated Nonsense Sentence");
 
-        // If the template is set to "default", a random template is selected
-        if (template.equals("default")) {
-            template = Template.getRandom();
-        }
+        sentence = sentence.trim();
+        if(!sentence.isEmpty()){
 
-        // Generate the NonSense sentences
-        List<Pair<String, String>> elements;
-        try {
-            elements = ApiHandler.getInstance().getElementsOfTextLemma(sentence);
-        } catch (IOException e) {
-            // TODO: gestire eccezioni
-            e.printStackTrace();
-            return "error";
-        } catch (Exception e) {
-            // TODO: gestire eccezioni
-            // qui sarebbe da gestire le eccezioni che vengono sollevate
-            // quando l'api di google non funziona
-            e.printStackTrace();
-            return "error";
-        }
+            model.addAttribute("inputSentence", sentence);
+            model.addAttribute("selectedTense", tense);
+            model.addAttribute("showSyntaxTree", showSyntaxTree);
+            model.addAttribute("saveToFile", saveToFile);
+            model.addAttribute("templateList", Template.getAllTemplate());
+            model.addAttribute("selectedTemplate", template);
 
-        // TODO: pensare a cosa fare se l'utente non inserisce nessun verb, nessun noun
-        // e nessuno adj
-        List<String> generated = Generator.generateSentences(elements, template, tense);
-        List<Pair<String, Integer>> toxicityScores = null;
-        if (generated != null && !generated.isEmpty()) {
+            // Generate the NonSense sentences
+            List<Pair<String, String>> elements;
             try {
-                toxicityScores = ApiHandler.getInstance().getToxicityScoreList(generated);
+                elements = ApiHandler.getInstance().getElementsOfTextLemma(sentence);
             } catch (IOException e) {
                 e.printStackTrace();
                 return "error";
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "error";
             }
-            StringBuilder sb = new StringBuilder();
-            // generated and toxicityScores should have the same size
-            for (int i = 0; i < generated.size(); i++) {
-                String sentenceGenerated = generated.get(i);
-                Pair<String, Integer> toxicityScore = toxicityScores.get(i);
-                sb.append(sentenceGenerated).append(" [").append(toxicityScore.getFirst())
-                        .append("] (").append(toxicityScore.getSecond()).append("%)<br>");
-            }
-            model.addAttribute("nonsenseResult", sb.toString());
 
-            // Save to the file generated.txt the generated NonSense sentences
-            if (saveToFile) {
+            List<String> generated = Generator.generateSentences(elements, template, tense);
+            List<Pair<String, Integer>> toxicityScores = null;
+            if (generated != null && !generated.isEmpty()) {
                 try {
-                    HistoryHandler.updateHistory(generated);
+                    toxicityScores = ApiHandler.getInstance().getToxicityScoreList(generated);
                 } catch (IOException e) {
                     e.printStackTrace();
                     return "error";
                 }
-            }
-
-        }
-
-        // Set syntax tree only if checkbox setted
-        String syntaxTreeString = "";
-        TreeNode root = null;
-        if (showSyntaxTree && generated != null && !generated.isEmpty()) {
-            for (String s : generated) {
-                try {
-                    root = ApiHandler.getInstance().getSyntaxTree(s);
-                    syntaxTreeString += Utilities.generateTreeHTML(root) + "\n\n";
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return "error";
+                StringBuilder sb = new StringBuilder();
+                // generated and toxicityScores should have the same size
+                for (int i = 0; i < generated.size(); i++) {
+                    String sentenceGenerated = generated.get(i);
+                    Pair<String, Integer> toxicityScore = toxicityScores.get(i);
+                    sb.append(sentenceGenerated).append(" [").append(toxicityScore.getFirst())
+                            .append("] (").append(toxicityScore.getSecond()).append("%)<br>");
                 }
+                model.addAttribute("nonsenseResult", sb.toString());
+
+                // Save to the file generated.txt the generated NonSense sentences
+                if (saveToFile) {
+                    try {
+                        HistoryHandler.updateHistory(generated);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return "error";
+                    }
+                }
+
             }
-            model.addAttribute("syntaxTree", syntaxTreeString);
-        } else {
-            model.addAttribute("syntaxTree", "The syntax tree will appear here...");
+
+            // Set syntax tree only if checkbox setted
+            String syntaxTreeString = "";
+            TreeNode root = null;
+            if (showSyntaxTree && generated != null && !generated.isEmpty()) {
+                for (String s : generated) {
+                    try {
+                        root = ApiHandler.getInstance().getSyntaxTree(s);
+                        syntaxTreeString += Utilities.generateTreeHTML(root) + "\n\n";
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return "error";
+                    }
+                }
+                model.addAttribute("syntaxTree", syntaxTreeString);
+            } else {
+                model.addAttribute("syntaxTree", "The syntax tree will appear here...");
+            }
         }
 
         return "index";
@@ -147,7 +137,6 @@ public class ControllerApplication {
         try {
             list = HistoryHandler.readHistory();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return "error";
         }
@@ -178,38 +167,40 @@ public class ControllerApplication {
             Model model) {
 
         // Refresh page parameters
-        model.addAttribute("inputSentence", sentence);
-        model.addAttribute("selectedTense", tense);
-        model.addAttribute("showSyntaxTree", showSyntaxTree);
-        model.addAttribute("saveToFile", saveToFile);
-        model.addAttribute("templateList", Template.getAllTemplate());
-        model.addAttribute("selectedTemplate", template);
-        model.addAttribute("nonsenseResult", "Your nonsense sentence will appear here ...");
-
-        TreeNode root = null;
-        String sentenceTemplate = null;
-        try {
-            sentenceTemplate = ApiHandler.getInstance().getPartsOfText(sentence);
-            root = ApiHandler.getInstance().getSyntaxTree(sentence);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "error";
-        }
-
-        // Set syntax tree only if checkbox setted
-        String syntaxTreeString;
-        if (showSyntaxTree) {
-            syntaxTreeString = Utilities.generateTreeHTML(root);
-            model.addAttribute("syntaxTree", syntaxTreeString);
-        } else {
-            model.addAttribute("syntaxTree", "The syntax tree will appear here...");
-        }
-
-        model.addAttribute("extractedWords", sentenceTemplate);
-        // ApiHandler.getToxicityScore(sentence);
-
         model.addAttribute("outputTitle", "Generated Nonsense Sentence");
+        model.addAttribute("nonsenseResult", "Your nonsense sentence will appear here ...");
+        model.addAttribute("syntaxTree", "The syntax tree will appear here...");
+        model.addAttribute("extractedWords", "The tamplate will appear here...");
 
+        sentence = sentence.trim();
+        if(!sentence.isEmpty()){
+
+            model.addAttribute("selectedTense", tense);
+            model.addAttribute("showSyntaxTree", showSyntaxTree);
+            model.addAttribute("saveToFile", saveToFile);
+            model.addAttribute("templateList", Template.getAllTemplate());
+            model.addAttribute("selectedTemplate", template);
+
+            TreeNode root = null;
+            String sentenceTemplate = null;
+            try {
+                sentenceTemplate = ApiHandler.getInstance().getPartsOfText(sentence);
+                root = ApiHandler.getInstance().getSyntaxTree(sentence);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "error";
+            }
+
+            // Set syntax tree only if checkbox setted
+            String syntaxTreeString;
+            if (showSyntaxTree) {
+                syntaxTreeString = Utilities.generateTreeHTML(root);
+                model.addAttribute("syntaxTree", syntaxTreeString);
+            }
+
+            model.addAttribute("extractedWords", sentenceTemplate);
+        }
+        
         return "index";
     }
 

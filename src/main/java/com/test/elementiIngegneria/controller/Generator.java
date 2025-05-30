@@ -10,12 +10,13 @@ import com.test.elementiIngegneria.utility.Pair;
 import com.test.elementiIngegneria.utility.Utilities;
 
 public class Generator {
-    public static List<String> generateSentences(List<Pair<String, String>> elements, String template, String tense) {
+    public static List<String> generateSentences(List<Pair<String, String>> elements, String defaultTemplate, String tense) {
         // 3 liste (1 nouns, 1 adjectives, 1 verbs)
         List<String> nouns = new ArrayList<>();
         List<String> adjectives = new ArrayList<>();
         List<String> verbs = new ArrayList<>();
         List<String> sentences = new ArrayList<>();
+        boolean changeTemplate = defaultTemplate.equals("default");
 
         for (Pair<String, String> s : elements) {
             String partOfSpeech = s.getSecond();
@@ -39,13 +40,20 @@ public class Generator {
         java.util.Collections.shuffle(adjectives);
         java.util.Collections.shuffle(verbs);
 
-        String currentSentence = template;
+        String template = defaultTemplate;
+        String currentSentence = null;
         // Simplify the template
-        List<String> simplifiedTemplate = Template.extractBracketWords(template);
+        List<String> simplifiedTemplate = null;
 
-        // TODO: refactor della parte dei verbi
         while (!nouns.isEmpty() || !adjectives.isEmpty() || !verbs.isEmpty()) {
-            System.out.println("Current template: " + template);
+            if(changeTemplate){
+                template = Template.getRandom();
+            }
+            else{
+                template = defaultTemplate;
+            }
+            currentSentence = template;
+            simplifiedTemplate = Template.extractBracketWords(template);
             // ========Fill template=========
             for (String currentType : simplifiedTemplate) {
                 String currentWord = "";
@@ -105,9 +113,6 @@ public class Generator {
             }
             sentences.add(currentSentence);
 
-            // TODO: quando si sceglie il template dalla select non va preso random ma va
-            // mantenuto lo stesso; passare un flag nella funzione?
-            template = Template.getRandom();
             simplifiedTemplate = Template.extractBracketWords(template);
             currentSentence = template;
         }

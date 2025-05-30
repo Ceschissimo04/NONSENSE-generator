@@ -12,9 +12,6 @@ import com.test.elementiIngegneria.utility.Pair;
 import com.test.elementiIngegneria.utility.Utilities;
 
 public class ApiHandler {
-    // TODO: gestire tutte le eccezioni se qualcosa non va
-    // es: non trova la apikey, non sei connesso a internet, api google non
-    // funziona...
     private final String API_KEY_FILE = "config.json";
     private final String apiKey;
     private static ApiHandler INSTANCE;
@@ -94,7 +91,6 @@ public class ApiHandler {
     public Pair<String, Integer> getToxicityScore(String sentence) {
         JSONObject json = ToxicityApiHandler.toxicityQuery(sentence, apiKey);
         if (json == null) {
-            // TODO: gestire eccezioni
             return new Pair<>("Error in API call", -1);
         }
 

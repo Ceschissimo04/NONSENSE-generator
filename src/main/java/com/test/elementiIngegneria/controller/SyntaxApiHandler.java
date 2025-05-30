@@ -43,10 +43,6 @@ public class SyntaxApiHandler {
             }
 
             // Ricevi risposta
-            // TODO: rimuovi stampe
-            int responseCode = con.getResponseCode();
-            System.out.println("Codice risposta: " + responseCode);
-
             try (BufferedReader br = new BufferedReader(
                     new InputStreamReader(con.getInputStream(),
                             java.nio.charset.StandardCharsets.UTF_8))) {
@@ -57,7 +53,6 @@ public class SyntaxApiHandler {
                     response.append(line.trim());
                 }
 
-                System.out.println("Risposta JSON:");
                 System.out.println(response.toString());
                 try {
                     return new JSONObject(response.toString());
@@ -67,7 +62,6 @@ public class SyntaxApiHandler {
                 }
             }
         } catch (IOException e) {
-            // TODO: decidere come gestire le eccezioni
             System.err.println("Errore durante la richiesta HTTP: " + e.getMessage());
         }
         return null;
