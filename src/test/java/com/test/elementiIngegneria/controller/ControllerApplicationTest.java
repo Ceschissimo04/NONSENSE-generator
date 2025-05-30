@@ -8,10 +8,12 @@ import com.test.elementiIngegneria.utility.Utilities;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.xml.transform.Templates;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -25,18 +27,9 @@ public class ControllerApplicationTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private Template mockTemplate;
-
-    @MockBean
-    private Utilities mockUtilities;
-
-    @MockBean
-    private Dictionary mockDictionary;
-
     @Test
     public void testController_DefaultPageLoadsSuccessfully() throws Exception {
-        List<Template> templates = new ArrayList<>();
+        ArrayList<String> templates = new ArrayList<>();
         when(Template.getAllTemplate()).thenReturn(templates);
 
         mockMvc.perform(get("/"))
@@ -68,7 +61,7 @@ public class ControllerApplicationTest {
     @Test
     public void testHistory_HistoryLoadsSuccessfully() throws Exception {
         List<String> historyList = new ArrayList<>();
-        when(mockDictionary.readHistory()).thenReturn(historyList);
+        when(HistoryHandler.readHistory()).thenReturn(historyList);
 
         mockMvc.perform(post("/history"))
                 .andExpect(status().isOk())
@@ -87,7 +80,7 @@ public class ControllerApplicationTest {
         TreeNode mockTree = mock(TreeNode.class);
         String generatedTreeHTML = "<div>MockTree</div>";
 
-        when(mockUtilities.generateTreeHTML(mockTree)).thenReturn(generatedTreeHTML);
+        when(Utilities.generateTreeHTML(mockTree)).thenReturn(generatedTreeHTML);
         when(Template.getAllTemplate()).thenReturn(new ArrayList<>());
 
         mockMvc.perform(post("/analyze")
@@ -105,7 +98,7 @@ public class ControllerApplicationTest {
     public void testAddDictionary_AddsWordsToDictionarySuccessfully() throws Exception {
         String sentence = "word1, word2";
         List<Pair<String, String>> wordPairs = new ArrayList<>();
-        when(mockDictionary.getElementsOfTextLemma(sentence)).thenReturn(wordPairs);
+        when(ApiHandler.getInstance().getElementsOfTextLemma(sentence)).thenReturn(wordPairs);
         when(Template.getAllTemplate()).thenReturn(new ArrayList<>());
 
         mockMvc.perform(post("/add")
@@ -113,6 +106,6 @@ public class ControllerApplicationTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("index"))
                 .andExpect(model().attribute("templateList", new ArrayList<>()));
-        verify(mockDictionary, times(1)).addWords(wordPairs);
+        verify(Dictionary.getInstance(), times(1)).addWords(wordPairs);
     }
 }

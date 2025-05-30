@@ -15,12 +15,23 @@ import com.test.elementiIngegneria.utility.Pair;
 import com.test.elementiIngegneria.utility.TreeNode;
 import com.test.elementiIngegneria.utility.Utilities;
 
+/**
+ * This controller class provides methods to handle HTTP requests for generating
+ * "nonsense" sentences, analyzing input sentences, and managing history.
+ * It also offers functionality to manage configurable templates and dictionaries.
+ */
 @Controller
 public class ControllerApplication {
     public static final String DEFAULT_LANGUAGE = "en";
     public static final double TOXICITY_THRESHOLD = 0.5; // probability value below which a sentence is considere
                                                          // non-toxic
 
+    /**
+     * Handles the initial page load request and sets up the model with default values.
+     *
+     * @param model The Spring MVC Model object to be populated with attributes
+     * @return The name of the view template to render ("index")
+     */
     @GetMapping("/")
     public String Controller(Model model) {
 
@@ -37,6 +48,18 @@ public class ControllerApplication {
     }
 
     // Form submit to this page
+
+    /**
+     * Generates nonsense sentences based on input parameters and handles various processing options.
+     *
+     * @param sentence       The input sentence to process
+     * @param template       The template to use for generation
+     * @param tense          The grammatical tense to apply
+     * @param showSyntaxTree Whether to display the syntax tree
+     * @param saveToFile     Whether to save generated sentences to history
+     * @param model          The Spring MVC Model object
+     * @return The view name to render, either "index" or "error"
+     */
     @PostMapping("/generate")
     public String generaNonsense(
             @RequestParam("sentence") String sentence,
@@ -127,6 +150,12 @@ public class ControllerApplication {
         return "index";
     }
 
+    /**
+     * Retrieves and displays the history of generated sentences.
+     *
+     * @param model The Spring MVC Model object
+     * @return The view name to render, either "index" or "error"
+     */
     @PostMapping("/history")
     public String history(Model model) {
 
@@ -157,6 +186,17 @@ public class ControllerApplication {
         return "index";
     }
 
+    /**
+     * Analyzes an input sentence and displays its template and optional syntax tree.
+     *
+     * @param sentence       The input sentence to analyze
+     * @param template       The template parameter (unused in analysis)
+     * @param tense          The tense parameter (unused in analysis)
+     * @param showSyntaxTree Whether to display the syntax tree
+     * @param saveToFile     The save option (unused in analysis)
+     * @param model          The Spring MVC Model object
+     * @return The view name to render, either "index" or "error"
+     */
     @PostMapping("/analyze")
     public String analyze(
             @RequestParam("sentence") String sentence,
@@ -204,6 +244,13 @@ public class ControllerApplication {
         return "index";
     }
 
+    /**
+     * Adds words from the input sentence to the dictionary.
+     *
+     * @param sentence The input sentence containing words to add
+     * @param model    The Spring MVC Model object
+     * @return The view name to render, either "index" or "error"
+     */
     @PostMapping("/add")
     public String addDictionary(@RequestParam("sentence") String sentence,
             Model model) {
