@@ -8,7 +8,7 @@
 
 ### Requirements
 
-* **Java Development Kit (JDK)**: Java 17 or higher. Download it from [Oracle website](https://www.oracle.com/it/java/technologies/downloads/#java24).
+* **Java Development Kit (JDK)**: Java 24. Download it from [Oracle website](https://www.oracle.com/it/java/technologies/downloads/#java24).
 
 * **Apache Maven**: Maven 4.0.0 is required for managing dependencies and building the project. Download it from the [Maven website](https://maven.apache.org/download.cgi).
 
@@ -41,7 +41,7 @@
 ## 3. Runtime Environment and Constraints
 
 * **Operating System**: Compatible with Windows, macOS, and Linux
-* **Java Version**: Java 17 or higher
+* **Java Version**: Java 24
 * **Maven**: Ensure Maven is installed and properly configured
 
 
