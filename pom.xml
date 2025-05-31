@@ -13,9 +13,9 @@
 	</parent>
 
 	<groupId>com.test</groupId>
-	<artifactId>elementiIngegneria</artifactId>
+	<artifactId>NonSenseGenerator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>elementiIngegneria</name>
+	<name>NonSenseGenerator</name>
 	<description>NonSense Generator Project</description>
 
 	<properties>
@@ -101,7 +101,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<mainClass>com.test.elementiIngegneria.Main</mainClass>
+					<mainClass>com.test.nonsenseGenerator.Main</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>
