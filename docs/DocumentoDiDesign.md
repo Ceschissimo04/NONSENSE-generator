@@ -1,19 +1,57 @@
 # Documento di Design: Nonsense Generator
 
 ## domain model ##
-da generare a codice ultimato
+![DomainModel.png](/images/DomainModel.png)
+
+descrizione degli ogetti
+---
 
 ## system sequence diagram ##
 da completare(prova.puml)
 
+---
+
 ## Internal sequence diagram ##
-tutti i file .puml
+### GENERATE SENTENCE ###
+![GenerateSentences.png](/images/GenerateSentences.png)
+
+### ANALYZE SENTENCE ###
+![AnalyzeStructure.png](/images/AnalyzeStructure.png)
+
+### ADD TO DICTIONARY ###
+![AddToDictionary.png](/images/AddToDictionary.png)
+
+### SHOW HISTORY ###
+![ShowHystory.png](/images/ShowHystory.png)
+
+### TOXICITY CONTROLLER ###
+![ToxicityController.png](/images/ToxicityController.png)
+
+---
 
 ## Design class model diagram ##
-da generare a codice ultimato
+![DesignClassModelDiagram.png](/images/DesignClassModelDiagram.png)
 
-questo devo vedere se e' il file giusto dove metterli
-## Design pattern(molto probabilmente ce ne sono altri)
+descrizione dei vari componenti:
+-ControllerApplication
+-Generator
+-ApiHandler
+-HistoryHandler
+-Dictionary
+
+---
+
+## architectural pattern ##
+Il progetto NONSENSE-GENERATOR ha come pattern architetturale MVC (Model-View-Controller) e viene applicato così:
+
+**Model**: comprende le classi che rappresentano la logica di dominio e i dati, come Dictionary, Word, Verb, Template, ecc. Queste classi gestiscono la struttura delle parole, i template e le operazioni sui dati.
+**View**: è costituita dai file HTML (ad esempio index.html, error.html) e dalle risorse statiche nella cartella resources/static/. Questi file definiscono l’interfaccia utente e presentano i risultati.
+**Controller**: le classi nella cartella controller (come ControllerApplication, ApiHandler, HistoryHandler) gestiscono le richieste dell’utente, coordinano l’interazione tra Model e View e restituiscono le risposte appropriate.
+In sintesi, il Controller riceve le richieste dalla View, utilizza il Model per elaborare i dati e aggiorna la View con i risultati, separando chiaramente la logica di presentazione da quella di business.
+
+---
+
+## Design pattern ##
 1. Singleton
 Dove: La classe ApiHandler implementa il pattern Singleton.
 

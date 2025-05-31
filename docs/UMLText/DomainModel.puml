@@ -1,0 +1,28 @@
+ @startuml
+ 
+object User
+object GUI
+object Word
+object Dictionary
+
+object Generator
+object ApiHandler
+object HistoryHandler
+
+object ControllerApplication
+
+' ==== Relationships ====
+User -- GUI :"1" interacts "*"
+
+GUI -- ControllerApplication :"1" display results "1"
+
+ControllerApplication -- Generator:"1" uses "1"
+ControllerApplication -- ApiHandler:"1" uses "1"
+ControllerApplication -- HistoryHandler:"1" uses "1"
+
+ApiHandler -- Dictionary :"1" uses "1"
+Generator -- Dictionary :"1" uses "1"
+
+Dictionary o-- Word :"1" contains
+
+@enduml

@@ -4,8 +4,6 @@
 
 **NONSENSE-generator** is a Java application designed to generate completely random sentences. By unpredictably combining nouns, adjectives, and verbs, the application creates grammatically structured but semantically meaningless phrases. This tool is useful for testing, simulation, or simply for fun.
 
-
-
 ## 2. Installation and Launch
 
 ### Requirements
@@ -16,11 +14,12 @@
 
 ### Installation Steps
 
-1. **Clone the repository**:
+1. **Clone the repository and insert the apiKey**:
 
    ```bash
    git clone https://github.com/Ceschissimo04/NONSENSE-generator.git
    cd NONSENSE-generator
+   echo { "apiKey":"YOUR:API_KEY" } > config.json  
    ```
 
 2. **Build and run the application**:

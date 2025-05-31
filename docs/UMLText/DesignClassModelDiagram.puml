@@ -42,7 +42,7 @@
     'Dictionary --> Noun
     'Dictionary --> Verb
     'Dictionary --> Adjective
-    Dictionary --o Word
+    Dictionary o-- Word
 '}
 
 ' ==== CONTROLLER ====
@@ -104,19 +104,14 @@
 ' ==== RELATIONSHIPS ====
 ControllerApplication --> ApiHandler
 ControllerApplication --> Generator
-ControllerApplication ..> HistoryHandler : uses
-'ControllerApplication --> Dictionary
-'ControllerApplication --> Template
-'ControllerApplication --> Utilities
-'ControllerApplication --> TreeNode
-'ControllerApplication --> Pair
+ControllerApplication --> HistoryHandler
 
 ApiHandler --> Utilities
 ApiHandler --> TreeNode
 ApiHandler --> Pair
 ApiHandler --> Dictionary
-ApiHandler --> SyntaxApiHandler : uses
-ApiHandler --> ToxicityApiHandler : uses
+ApiHandler --> SyntaxApiHandler
+ApiHandler --> ToxicityApiHandler
 
 Generator --> Dictionary
 Generator --> Template
@@ -125,8 +120,6 @@ Generator --> Pair
 Generator --> Verb
 
 Dictionary --> Pair
-
-'Template --> Pair
 
 Utilities --> TreeNode
 
