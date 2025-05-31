@@ -8,7 +8,7 @@
 
 ### Requirements
 
-* **Java Development Kit (JDK)**: Java 24. Download it from [Oracle website](https://www.oracle.com/it/java/technologies/downloads/#java24).
+* **Java Development Kit (JDK)**: Java 17 or higher. Download it from [Oracle website](https://www.oracle.com/it/java/technologies/downloads/#java24).
 
 * **Apache Maven**: Maven 4.0.0 is required for managing dependencies and building the project. Download it from the [Maven website](https://maven.apache.org/download.cgi).
 
@@ -19,7 +19,7 @@
    ```bash
    git clone https://github.com/Ceschissimo04/NONSENSE-generator.git
    cd NONSENSE-generator
-   echo { "apiKey":"YOUR:API_KEY" } > config.json  
+   echo { "apiKey":"YOUR_API_KEY" } > config.json  
    ```
 
 2. **Build and run the application**:
@@ -41,7 +41,7 @@
 ## 3. Runtime Environment and Constraints
 
 * **Operating System**: Compatible with Windows, macOS, and Linux
-* **Java Version**: Java 24. **Dovrebbe funzionare da** Java 17 or higher
+* **Java Version**: Java 17 or higher
 * **Maven**: Ensure Maven is installed and properly configured
 
 
