@@ -1,79 +1,78 @@
-# Documento di Design: Nonsense Generator
+# **Design Document: Nonsense Generator**
 
-## domain model ##
-![DomainModel.png](/images/DomainModel.png)
+## **Domain Model**
 
-descrizione degli ogetti
----
+![DomainModel.png](images\DomainModel.png)
 
-## system sequence diagram ##
-da completare(prova.puml)
+## **System Sequence Diagram**
 
----
+![SystemSequenceDiagram.png](images/SystemSequenceDiagram.png)
 
-## Internal sequence diagram ##
-### GENERATE SENTENCE ###
-![GenerateSentences.png](/images/GenerateSentences.png)
+## **Internal Sequence Diagram**
 
-### ANALYZE SENTENCE ###
-![AnalyzeStructure.png](/images/AnalyzeStructure.png)
+### GENERATE SENTENCE
 
-### ADD TO DICTIONARY ###
-![AddToDictionary.png](/images/AddToDictionary.png)
+![GenerateSentences.png](images/GenerateSentences.png)
 
-### SHOW HISTORY ###
-![ShowHystory.png](/images/ShowHystory.png)
+### ANALYZE SENTENCE
 
-### TOXICITY CONTROLLER ###
-![ToxicityController.png](/images/ToxicityController.png)
+![AnalyzeStructure.png](images/AnalyzeStructure.png)
 
----
+### ADD TO DICTIONARY
 
-## Design class model diagram ##
-![DesignClassModelDiagram.png](/images/DesignClassModelDiagram.png)
+![AddToDictionary.png](images/AddToDictionary.png)
 
-descrizione dei vari componenti:
--ControllerApplication
--Generator
--ApiHandler
--HistoryHandler
--Dictionary
+### SHOW HISTORY
 
----
+![HistoryHandler.png](images/HistoryHandler.png)
 
-## architectural pattern ##
-Il progetto NONSENSE-GENERATOR ha come pattern architetturale MVC (Model-View-Controller) e viene applicato così:
+### TOXICITY CONTROLLER
 
-**Model**: comprende le classi che rappresentano la logica di dominio e i dati, come Dictionary, Word, Verb, Template, ecc. Queste classi gestiscono la struttura delle parole, i template e le operazioni sui dati.
-**View**: è costituita dai file HTML (ad esempio index.html, error.html) e dalle risorse statiche nella cartella resources/static/. Questi file definiscono l’interfaccia utente e presentano i risultati.
-**Controller**: le classi nella cartella controller (come ControllerApplication, ApiHandler, HistoryHandler) gestiscono le richieste dell’utente, coordinano l’interazione tra Model e View e restituiscono le risposte appropriate.
-In sintesi, il Controller riceve le richieste dalla View, utilizza il Model per elaborare i dati e aggiorna la View con i risultati, separando chiaramente la logica di presentazione da quella di business.
+![ToxicityController.png](images/ToxicityController.png)
 
----
+## **Design Class Model Diagram**
 
-## Design pattern ##
-1. Singleton
-Dove: La classe ApiHandler implementa il pattern Singleton.
+![DesignClassModelDiagram.png](images/DesignClassModelDiagram.png)
 
-Come: Ha un campo statico privato private static ApiHandler INSTANCE; che contiene l’unica istanza della classe.
-Il costruttore è privato, quindi non può essere chiamato dall’esterno.
-Il metodo statico pubblico getInstance() controlla se l’istanza esiste già; se no, la crea e la restituisce. In questo modo, in tutta l’applicazione esisterà una sola istanza di ApiHandler.
+### Component Descriptions
 
-Perché: Questo pattern viene usato per centralizzare la gestione delle chiamate alle API e la lettura della chiave API, evitando duplicazioni e garantendo coerenza.
+* **ControllerApplication**: Manages the main application flow, receiving user requests and coordinating operations among various handlers and the model. It routes requests to appropriate components and returns responses.
 
-2. Facade
-Dove: L’intera classe ApiHandler funge da Facade.
+* **Generator**: Responsible for generating nonsense sentences. It uses data from the dictionary and templates to create new sentences, applying composition rules defined in the model.
 
-Come: Espone metodi semplici come getSyntaxTree, getPartsOfText, getToxicityScore, ecc.
-Nasconde la complessità delle chiamate alle API esterne (Google Syntax API, Toxicity API), la gestione delle chiavi, la costruzione delle richieste e il parsing delle risposte JSON.
-Gli altri componenti dell’applicazione possono così interagire con le API tramite un’interfaccia semplice e coerente, senza preoccuparsi dei dettagli implementativi.
+* **ApiHandler**: Handles communication with external APIs (e.g., Google Syntax API and Toxicity API). Implements the Singleton and Facade patterns to centralize and simplify API access, managing request construction, sending, and response parsing.
 
-Perché:Il pattern Facade semplifica l’utilizzo di sistemi complessi, fornendo un unico punto di accesso e nascondendo la logica interna.
+* **HistoryHandler**: Manages the history of generated sentences and performed analyses. It allows saving, retrieving, and displaying the user's operation history.
 
-3. Adapter
-Dove: Nei metodi che convertono le risposte delle API in strutture dati Java.
+* **Dictionary**: Represents the internal dictionary of the application, containing words, verbs, templates, and other linguistic structures. Provides methods to add, modify, and retrieve elements, supporting sentence generation and analysis.
 
-Come: Metodi come getElementsOfText, getElementsOfTextLemma, getToxicityScore e getToxicityScoreList ricevono risposte JSON dalle API esterne.
-Questi metodi trasformano (adattano) i dati JSON in oggetti e strutture dati Java (ArrayList<String[]>, List<Pair<String, String>>, Pair<String, Integer>, ecc.) che sono più facili da usare nel resto dell’applicazione.
+## **Architectural Pattern**
 
-Perché: Il pattern Adapter viene usato per rendere compatibili formati di dati diversi, permettendo all’applicazione di lavorare con dati provenienti da fonti esterne senza dover gestire direttamente il formato originale.
+The **NONSENSE-GENERATOR** project follows the **MVC (Model-View-Controller)** architectural pattern, applied as follows:
+
+**Model**: Includes classes that represent domain logic and data, such as `Dictionary`, `Word`, `Verb`, `Template`, etc. These classes manage word structures, templates, and data operations.
+
+**View**: Consists of HTML files (e.g., `index.html`, `error.html`) and static resources located in the `resources/static/` folder. These files define the user interface and display results.
+
+**Controller**: Classes in the `controller` folder (such as `ControllerApplication`, `ApiHandler`, `HistoryHandler`) handle user requests, coordinate interaction between the Model and the View, and return appropriate responses.
+In summary, the Controller receives requests from the View, uses the Model to process data, and updates the View with results, clearly separating presentation logic from business logic.
+
+## **Design Patterns**
+
+1. **Singleton**:
+   The `ApiHandler` class implements the Singleton pattern. It has a private static field:
+   `private static ApiHandler INSTANCE` which holds the single instance of the class.
+   The constructor is private, so it cannot be called from outside.
+   The public static method `getInstance()` checks whether the instance already exists; if not, it creates and returns it. This ensures only one `ApiHandler` instance exists in the application.
+   This pattern is used to centralize API call management and API key access, avoiding duplication and ensuring consistency.
+
+2. **Facade**:
+   The entire `ApiHandler` class functions as a Facade. It exposes simple methods such as `getSyntaxTree`, `getPartsOfText`, `getToxicityScore`, etc.
+   It hides the complexity of external API calls (Google Syntax API, Toxicity API), key management, request construction, and JSON response parsing.
+   Other components can interact with APIs through a simple and consistent interface, without worrying about implementation details.
+   The Facade pattern simplifies the use of complex systems by providing a single point of access and hiding internal logic.
+
+3. **Adapter**:
+   Present in methods that convert API responses into Java data structures, such as `getElementsOfText`, `getElementsOfTextLemma`, `getToxicityScore`, and `getToxicityScoreList`, which receive JSON responses from external APIs.
+   These methods transform (adapt) the JSON data into Java objects and data structures (`ArrayList<String[]>`, `List<Pair<String, String>>`, `Pair<String, Integer>`, etc.) that are easier to use throughout the application.
+   The Adapter pattern is used to make different data formats compatible, allowing the application to work with data from external sources without handling the original format directly.

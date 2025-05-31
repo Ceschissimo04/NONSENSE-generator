@@ -65,3 +65,10 @@ The NONSENSE-generator project leverages several third-party libraries to stream
 The NONSENSE-generator project uses two APIs from **Google Cloud**:
 * **Analyzing Syntax**: Inspects the structure of the given text. Syntactic Analysis breaks up the given text into a series of tokens and provides linguistic information about those tokens ([Documentation](https://cloud.google.com/natural-language/docs/analyzing-syntax)).
 * **Moderate text**: Analyzes a text against a list of safety attributes, which include "harmful categories" and topics that may be considered sensitive ([Documentation](https://cloud.google.com/natural-language/docs/moderating-text)).
+
+
+## Other docs ##
+* User stories ==> [link](https://studenti-team-l2ldmeti.atlassian.net/jira/software/projects/MBA/list)
+* Design document ==> [link](docs\DocumentoDiDesign.md)
+* System test document ==> [link]()
+* Unit test report ==> [link]()
