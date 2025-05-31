@@ -11,9 +11,20 @@ import java.net.URL;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Handles syntax analysis API requests to the Google Cloud Natural Language API.
+ * Provides functionality to analyze the syntax of text using the API endpoint.
+ */
 public class SyntaxApiHandler {
     private static final String API_URL_SYNTAX = "https://language.googleapis.com/v1/documents:analyzeSyntax?key=";
 
+    /**
+     * Sends a syntax analysis request to the Google Cloud Natural Language API.
+     *
+     * @param text   The text content to analyze
+     * @param apiKey The API key for authentication
+     * @return JSONObject containing the API response, or null if the request fails
+     */
     public static JSONObject SyntaxQuery(String text, String apiKey) {
         String jsonInput = String.format(
                 "{\n" +
@@ -36,13 +47,11 @@ public class SyntaxApiHandler {
             con.setRequestProperty("Content-Type", "application/json; utf-8");
             con.setRequestProperty("Accept", "application/json");
 
-            // Scrivi JSON nel body
             try (OutputStream os = con.getOutputStream()) {
                 byte[] input = jsonInput.getBytes(java.nio.charset.StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
             }
 
-            // Ricevi risposta
             try (BufferedReader br = new BufferedReader(
                     new InputStreamReader(con.getInputStream(),
                             java.nio.charset.StandardCharsets.UTF_8))) {

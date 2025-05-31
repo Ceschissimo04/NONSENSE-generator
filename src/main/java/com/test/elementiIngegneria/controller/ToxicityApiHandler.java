@@ -11,9 +11,20 @@ import java.net.URL;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Handler class for making API calls to Google's Content Moderation API.
+ * Provides functionality to check text toxicity levels.
+ */
 public class ToxicityApiHandler {
     private static final String API_URL_TOXICITY = "https://language.googleapis.com/v1/documents:moderateText?key=";
 
+    /**
+     * Sends a query to the Google Content Moderation API to analyze text toxicity.
+     *
+     * @param text   The text content to be analyzed
+     * @param apiKey The API key for authentication
+     * @return JSONObject containing the API response, or null if the request fails
+     */
     public static JSONObject toxicityQuery(String text, String apiKey) {
         String jsonInput = String.format(
                 "{\n" +
@@ -21,7 +32,7 @@ public class ToxicityApiHandler {
                         "    \"type\": \"PLAIN_TEXT\",\n" +
                         "    \"language\": \"%s\",\n" +
                         "    \"content\": \"%s\"\n" +
-                        "}" +
+                        "  }\n" +
                         "}",
                 ControllerApplication.DEFAULT_LANGUAGE, text);
 
@@ -35,13 +46,11 @@ public class ToxicityApiHandler {
             con.setRequestProperty("Content-Type", "application/json; utf-8");
             con.setRequestProperty("Accept", "application/json");
 
-            // Scrivi JSON nel body
             try (OutputStream os = con.getOutputStream()) {
                 byte[] input = jsonInput.getBytes(java.nio.charset.StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
             }
 
-            // Ricevi risposta
             try (BufferedReader br = new BufferedReader(
                     new InputStreamReader(con.getInputStream(),
                             java.nio.charset.StandardCharsets.UTF_8))) {

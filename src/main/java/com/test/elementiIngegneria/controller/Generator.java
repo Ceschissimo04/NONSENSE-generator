@@ -9,9 +9,19 @@ import com.test.elementiIngegneria.model.Verb;
 import com.test.elementiIngegneria.utility.Pair;
 import com.test.elementiIngegneria.utility.Utilities;
 
+/**
+ * Generator class responsible for creating sentences from given elements using templates.
+ */
 public class Generator {
+    /**
+     * Generates sentences using provided elements, template and tense.
+     *
+     * @param elements        List of pairs containing words and their parts of speech
+     * @param defaultTemplate Template string to use for sentence generation
+     * @param tense           Desired tense for verbs (present, past, future)
+     * @return List of generated sentences
+     */
     public static List<String> generateSentences(List<Pair<String, String>> elements, String defaultTemplate, String tense) {
-        // 3 liste (1 nouns, 1 adjectives, 1 verbs)
         List<String> nouns = new ArrayList<>();
         List<String> adjectives = new ArrayList<>();
         List<String> verbs = new ArrayList<>();
@@ -31,7 +41,6 @@ public class Generator {
                     verbs.add(s.getFirst());
                     break;
                 default:
-                    // handle other cases if needed
                     break;
             }
         }
@@ -42,7 +51,6 @@ public class Generator {
 
         String template = defaultTemplate;
         String currentSentence = null;
-        // Simplify the template
         List<String> simplifiedTemplate = null;
 
         while (!nouns.isEmpty() || !adjectives.isEmpty() || !verbs.isEmpty()) {
@@ -54,7 +62,6 @@ public class Generator {
             }
             currentSentence = template;
             simplifiedTemplate = Template.extractBracketWords(template);
-            // ========Fill template=========
             for (String currentType : simplifiedTemplate) {
                 String currentWord = "";
                 switch (currentType) {

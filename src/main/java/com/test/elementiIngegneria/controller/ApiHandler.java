@@ -11,15 +11,32 @@ import com.test.elementiIngegneria.utility.Pair;
 import com.test.elementiIngegneria.utility.TreeNode;
 import com.test.elementiIngegneria.utility.Utilities;
 
+
+/**
+ * Handler class for making API calls to various services.
+ * Implements the Singleton pattern to ensure only one instance exists.
+ */
 public class ApiHandler {
     private final String API_KEY_FILE = "config.json";
     private final String apiKey;
     private static ApiHandler INSTANCE;
 
+    /**
+     * Private constructor for Singleton pattern.
+     * Loads the API key from configuration file.
+     *
+     * @throws IOException if the API key file cannot be read
+     */
     private ApiHandler() throws IOException {
         apiKey = ApiKeyLoader.getApiKey(API_KEY_FILE);
     }
 
+    /**
+     * Gets the singleton instance of ApiHandler.
+     *
+     * @return The singleton instance of ApiHandler
+     * @throws IOException if there's an error initializing the handler
+     */
     public static ApiHandler getInstance() throws IOException {
         if (INSTANCE == null) {
             INSTANCE = new ApiHandler();
@@ -27,10 +44,22 @@ public class ApiHandler {
         return INSTANCE;
     }
 
+    /**
+     * Creates a syntax tree from a given sentence using API.
+     *
+     * @param sentence The input sentence to analyze
+     * @return A TreeNode representing the syntax structure of the sentence
+     */
     public TreeNode getSyntaxTree(String sentence) {
         return Utilities.buildTreeFromJson(SyntaxApiHandler.SyntaxQuery(sentence, apiKey));
     }
 
+    /**
+     * Analyzes text and returns a string with parts of speech marked for nouns, verbs, and adjectives.
+     *
+     * @param text The input text to analyze
+     * @return A formatted string with parts of speech marked in brackets
+     */
     public String getPartsOfText(String text) {
         JSONObject json = SyntaxApiHandler.SyntaxQuery(text, apiKey);
         JSONArray tokens = json.getJSONArray("tokens");
@@ -43,8 +72,6 @@ public class ApiHandler {
             if (partOfSpeech.equals("NOUN") || partOfSpeech.equals("VERB") || partOfSpeech.equals("ADJ")) {
                 syntaxTree.append(" [").append(partOfSpeech.toLowerCase()).append("]");
             } else {
-                // add the " " before every token except the first one and punctuation.
-                // this is just aestetics to have decently formatted output
                 if (i > 0 && !partOfSpeech.equals("PUNCT")) {
                     syntaxTree.append(" ");
                 }
@@ -54,7 +81,12 @@ public class ApiHandler {
         return syntaxTree.toString().trim();
     }
 
-    // nome da cambiare
+    /**
+     * Extracts words and their parts of speech from text.
+     *
+     * @param text The input text to analyze
+     * @return ArrayList of String arrays containing [word, partOfSpeech]
+     */
     public ArrayList<String[]> getElementsOfText(String text) {
         ArrayList<String[]> result = new ArrayList<>();
         JSONObject json = SyntaxApiHandler.SyntaxQuery(text, apiKey);
@@ -71,7 +103,12 @@ public class ApiHandler {
         return result;
     }
 
-    // nome da cambiare
+    /**
+     * Extracts lemmas and their parts of speech from text.
+     *
+     * @param text The input text to analyze
+     * @return List of Pairs containing lemma and part of speech
+     */
     public List<Pair<String, String>> getElementsOfTextLemma(String text) {
         JSONObject json = SyntaxApiHandler.SyntaxQuery(text, apiKey);
         List<Pair<String, String>> result = new ArrayList<>();
@@ -88,6 +125,12 @@ public class ApiHandler {
         return result;
     }
 
+    /**
+     * Analyzes the toxicity of a given sentence.
+     *
+     * @param sentence The input sentence to analyze
+     * @return Pair containing category of toxicity and confidence score (0-100)
+     */
     public Pair<String, Integer> getToxicityScore(String sentence) {
         JSONObject json = ToxicityApiHandler.toxicityQuery(sentence, apiKey);
         if (json == null) {
@@ -115,6 +158,12 @@ public class ApiHandler {
         return new Pair<>(detectedCategory, (int) (highestConfidence * 100));
     }
 
+    /**
+     * Analyzes the toxicity of multiple sentences.
+     *
+     * @param sentences List of sentences to analyze
+     * @return List of Pairs containing toxicity category and confidence score for each sentence
+     */
     public List<Pair<String, Integer>> getToxicityScoreList(List<String> sentences) {
         List<Pair<String, Integer>> results = new ArrayList<>();
         for (String sentence : sentences) {

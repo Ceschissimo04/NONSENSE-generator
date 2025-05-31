@@ -10,6 +10,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.test.elementiIngegneria.utility.Pair;
 
+/**
+ * A singleton class that manages collections of words (nouns, adjectives, and verbs).
+ * Loads words from files and provides methods to access and manipulate the collections.
+ */
 public class Dictionary {
 
     private static Dictionary INSTANCE;
@@ -20,6 +24,10 @@ public class Dictionary {
     private static final String ADJECTIVES_FILE_PATH = "src/main/resources/static/files/adjs.txt";
     private static final String VERBS_FILE_PATH = "src/main/resources/static/files/better_verbs.json";
 
+    /**
+     * Private constructor for singleton pattern.
+     * Initializes word collections and loads words from files.
+     */
     private Dictionary() {
         nouns = new java.util.ArrayList<>();
         adjs = new java.util.ArrayList<>();
@@ -29,12 +37,22 @@ public class Dictionary {
         loadAllVerbs();
     }
 
+    /**
+     * Gets the singleton instance of Dictionary.
+     * Creates a new instance if one doesn't exist.
+     *
+     * @return The singleton instance of Dictionary
+     */
     public static Dictionary getInstance() {
         if (INSTANCE == null)
             INSTANCE = new Dictionary();
         return INSTANCE;
     }
 
+    /**
+     * Loads all verbs from the JSON file specified in VERBS_FILE_PATH.
+     * Each verb entry contains multiple forms of the verb.
+     */
     public void loadAllVerbs() {
         try (FileReader reader = new FileReader(VERBS_FILE_PATH)) {
             JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
@@ -51,6 +69,9 @@ public class Dictionary {
         }
     }
 
+    /**
+     * Loads all nouns from the text file specified in NOUNS_FILE_PATH.
+     */
     public void loadAllNouns() {
         try {
             BufferedReader br = new BufferedReader(new FileReader(NOUNS_FILE_PATH));
@@ -62,6 +83,9 @@ public class Dictionary {
         }
     }
 
+    /**
+     * Loads all adjectives from the text file specified in ADJECTIVES_FILE_PATH.
+     */
     public void loadAllAdjs() {
         try {
             BufferedReader br = new BufferedReader(new FileReader(ADJECTIVES_FILE_PATH));
@@ -73,6 +97,11 @@ public class Dictionary {
         }
     }
 
+    /**
+     * Returns a random noun from the collection.
+     *
+     * @return A random Word object of type Noun, or null if collection is empty
+     */
     public Word getRandomNoun() {
         if (nouns.isEmpty())
             return null;
@@ -80,6 +109,11 @@ public class Dictionary {
         return nouns.get(idxRandom);
     }
 
+    /**
+     * Returns a random adjective from the collection.
+     *
+     * @return A random Word object of type Adjective, or null if collection is empty
+     */
     public Word getRandomAdj() {
         if (adjs.isEmpty())
             return null;
@@ -87,6 +121,11 @@ public class Dictionary {
         return adjs.get(idxRandom);
     }
 
+    /**
+     * Returns a random verb from the collection.
+     *
+     * @return A random Word object of type Verb, or null if collection is empty
+     */
     public Word getRandomVerb() {
         if (verbs.isEmpty())
             return null;
@@ -94,6 +133,12 @@ public class Dictionary {
         return verbs.get(idxRandom);
     }
 
+    /**
+     * Adds new words to their respective collections based on their type.
+     * Duplicates are not added.
+     *
+     * @param wordsList List of pairs containing word and its type (NOUN, ADJ, or VERB)
+     */
     public void addWords(List<Pair<String, String>> wordsList) {
         for (Pair<String, String> pair : wordsList) {
             String word = pair.getFirst();
@@ -114,6 +159,12 @@ public class Dictionary {
         }
     }
 
+    /**
+     * Searches for a verb in the collection by its string representation.
+     *
+     * @param verb The string to search for
+     * @return The found Word object or a new Verb object if not found
+     */
     public Word getVerbFromString(String verb) {
         for (Word w : verbs) {
             if (w.getWord().equals(verb)) {

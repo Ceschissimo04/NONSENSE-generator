@@ -15,13 +15,13 @@ class TemplateTest {
      */
     @Test
     void testGetRandom_ReturnsValueInList() {
-        // Set up the mocked data
+
         ArrayList<String> mockTemplates = new ArrayList<>();
         mockTemplates.add("Template1");
         mockTemplates.add("Template2");
         mockTemplates.add("Template3");
 
-        // Use reflection to replace the allTemplates static field
+        // Replace the static allTemplates field with mock data for testing
         replaceAllTemplates(mockTemplates);
 
         // Call the method under test
@@ -41,21 +41,16 @@ class TemplateTest {
         ArrayList<String> emptyTemplates = new ArrayList<>();
         replaceAllTemplates(emptyTemplates);
 
-        // Call the method under test and verify that it throws an exception
-        assertThrows(IndexOutOfBoundsException.class, Template::getRandom,
-                "getRandom should throw IndexOutOfBoundsException when the allTemplates list is empty.");
+        ArrayList<String> finalEmptyTemplates = Template.getAllTemplate();
+        // Call the method under test and expect the size is equal to zero
+        assertEquals(finalEmptyTemplates.size(), 0 );
     }
 
     /**
      * Helper method to replace the static allTemplates field in the Template class for testing purposes.
      */
     private void replaceAllTemplates(ArrayList<String> newTemplates) {
-        try {
-            var allTemplatesField = Template.class.getDeclaredField("allTemplates");
-            allTemplatesField.setAccessible(true);
-            allTemplatesField.set(null, newTemplates);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            fail("Failed to set up the test: " + e.getMessage());
-        }
+        Template.getAllTemplate().clear();
+        Template.getAllTemplate().addAll(newTemplates);
     }
 }

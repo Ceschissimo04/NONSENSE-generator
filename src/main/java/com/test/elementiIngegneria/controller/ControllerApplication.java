@@ -22,12 +22,20 @@ import com.test.elementiIngegneria.utility.Utilities;
  */
 @Controller
 public class ControllerApplication {
+    /**
+     * Default language code used for text processing
+     */
     public static final String DEFAULT_LANGUAGE = "en";
-    public static final double TOXICITY_THRESHOLD = 0.5; // probability value below which a sentence is considere
-                                                         // non-toxic
 
     /**
-     * Handles the initial page load request and sets up the model with default values.
+     * Threshold value below which a sentence is considered non-toxic
+     */
+    public static final double TOXICITY_THRESHOLD = 0.5;
+
+    /**
+     * Handles the initial page load request and sets up the model with default values for the web interface.
+     * This includes loading templates and initializing form attributes for syntax tree, nonsense results,
+     * and extracted words display.
      *
      * @param model The Spring MVC Model object to be populated with attributes
      * @return The name of the view template to render ("index")
@@ -47,18 +55,19 @@ public class ControllerApplication {
         return "index";
     }
 
-    // Form submit to this page
-
     /**
-     * Generates nonsense sentences based on input parameters and handles various processing options.
+     * Processes the form submission to generate nonsense sentences based on the input parameters.
+     * This method handles sentence generation, toxicity analysis, syntax tree visualization,
+     * and history saving functionality. It uses the provided template and tense to transform
+     * the input sentence into one or more nonsense variations.
      *
-     * @param sentence       The input sentence to process
-     * @param template       The template to use for generation
-     * @param tense          The grammatical tense to apply
-     * @param showSyntaxTree Whether to display the syntax tree
-     * @param saveToFile     Whether to save generated sentences to history
-     * @param model          The Spring MVC Model object
-     * @return The view name to render, either "index" or "error"
+     * @param sentence       The input sentence to process and transform
+     * @param template       The template pattern to use for sentence generation
+     * @param tense          The grammatical tense to apply to generated sentences
+     * @param showSyntaxTree Whether to generate and display the syntax tree visualization
+     * @param saveToFile     Whether to save generated sentences to the history file
+     * @param model          The Spring MVC Model object for view data
+     * @return The view name to render ("index" on success, "error" on failure)
      */
     @PostMapping("/generate")
     public String generaNonsense(

@@ -1,10 +1,13 @@
 package com.test.elementiIngegneria.utility;
 
 /**
- * A generic class representing a pair of values.
+ * A generic class representing an immutable pair of two values of different types.
+ * Each pair stores two elements: first and second. Both elements can be of different types.
  *
- * @param <First> the type of the first element
- * @param <Second> the type of the second element
+ * @param <First> the type of the first element in the pair
+ * @param <Second> the type of the second element in the pair
+ * @author ElementiIngegneria Team
+ * @version 1.0
  */
 public class Pair<First, Second> {
     private First first;
@@ -12,9 +15,10 @@ public class Pair<First, Second> {
 
     /**
      * Constructs a new Pair with the specified first and second values.
+     * Both parameters are stored internally and can be retrieved using getter methods.
      *
-     * @param first the first element
-     * @param second the second element
+     * @param first the first element to store in the pair
+     * @param second the second element to store in the pair
      */
     public Pair(First first, Second second) {
         this.first = first;
@@ -59,10 +63,21 @@ public class Pair<First, Second> {
     /**
      * Returns a string representation of the object.
      *
-     * @return a string representation of the object
+     * @return a string representation of the pair in format "first-second"
      */
     @Override
     public String toString() {
         return first + "-" + second;
+    }
+
+    /**
+     * Returns a hash code value for the object.
+     *
+     * @return a hash code value for this pair
+     */
+    @Override
+    public int hashCode() {
+        int result = first.hashCode();
+        return 31 * result + second.hashCode();
     }
 }
