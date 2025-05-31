@@ -5,7 +5,6 @@ User -> GUI: Click "Analyze Structure" (with sentence, template, tense, showSynt
 GUI -> ControllerApplication: POST /analyze(sentence, template, tense, showSyntaxTree, saveToFile) 
 ControllerApplication -> ApiHandler: getPartsOfText(sentence) 
 
-'da vedere se tenere questa parte
 ApiHandler -> syntaxApiHandler: Call Syntax API(sentence)
 syntaxApiHandler -> ApiHandler: JSON response
 

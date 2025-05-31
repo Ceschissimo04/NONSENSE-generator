@@ -10,12 +10,10 @@ ApiHandler --> ControllerApplication: List<Pair<String, String>>
 ControllerApplication -> Generator: generateSentences(elements, template, tense)
 Generator -> Dictionary: getRandomWord(type) 
 
-'qui forse da mettere un loop
 Dictionary --> Generator: word 
 Generator -> ToxicityApiHandler: getToxicityScoreList(generatedSentences)
 ToxicityApiHandler --> Generator:List<Pair<String, Integer>> generatedSentences,ToxicityScore
 
-'in realta ToxicityScore viene concatenato alle generatedSentences
 Generator --> ControllerApplication: List<String> generatedSentences 
 ControllerApplication --> GUI: Display generatedSentences
 GUI --> User: Show generatedSentences

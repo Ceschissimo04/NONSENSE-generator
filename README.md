@@ -70,5 +70,4 @@ The NONSENSE-generator project uses two APIs from **Google Cloud**:
 ## Other docs ##
 * User stories ==> [link](https://studenti-team-l2ldmeti.atlassian.net/jira/software/projects/MBA/list)
 * Design document ==> [link](docs\DocumentoDiDesign.md)
-* System test document ==> [link]()
-* Unit test report ==> [link]()
+* Unit test report ==> [link](https://html-preview.github.io/?url=https://github.com/Ceschissimo04/NONSENSE-generator/blob/main/docs/report/surefire.html)
