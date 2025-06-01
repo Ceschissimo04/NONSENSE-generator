@@ -21,6 +21,7 @@
    cd NONSENSE-generator
    echo { "apiKey":"YOUR_API_KEY" } > config.json  
    ```
+   If the echo command does not work, you need to create a config.json file with the text: { "apiKey":"YOUR_API_KEY" }
 
 2. **Build and run the application**:
 
@@ -28,12 +29,14 @@
    ```bash
    .\mvnw clean install
    .\mvnw spring-boot:run
+   start http://localhost:8080
    ```
 
    **linux and macOS user**
    ```bash
    mvn clean install
    mvn spring-boot:run
+   open http://localhost:8080
    ```
    
 
@@ -70,4 +73,5 @@ The NONSENSE-generator project uses two APIs from **Google Cloud**:
 ## Other docs ##
 * User stories ==> [link](https://studenti-team-l2ldmeti.atlassian.net/jira/software/projects/MBA/list)
 * Design document ==> [link](docs\DocumentoDiDesign.md)
+* System test ==> [link](docs\SystemTest.md)
 * Unit test report ==> [link](https://html-preview.github.io/?url=https://github.com/Ceschissimo04/NONSENSE-generator/blob/main/docs/report/surefire.html)
