@@ -14,14 +14,14 @@
 
 ### Installation Steps
 
-1. **Clone the repository and insert the apiKey**:
+1. **Clone the repository and insert the API key**:
 
    ```bash
    git clone https://github.com/Ceschissimo04/NONSENSE-generator.git
    cd NONSENSE-generator
-   echo { "apiKey":"YOUR_API_KEY" } > config.json  
    ```
-   If the echo command does not work, you need to create a config.json file with the text: { "apiKey":"YOUR_API_KEY" }.
+   Create a file named config.json in the root directory of the project and add the following json string as content:
+   {"apiKey": "YOUR_API_KEY"}
 
 2. **Build and run the application**:
    **windows user**
