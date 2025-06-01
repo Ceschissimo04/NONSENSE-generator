@@ -21,25 +21,22 @@
    cd NONSENSE-generator
    echo { "apiKey":"YOUR_API_KEY" } > config.json  
    ```
-   If the echo command does not work, you need to create a config.json file with the text: { "apiKey":"YOUR_API_KEY" }
+   If the echo command does not work, you need to create a config.json file with the text: { "apiKey":"YOUR_API_KEY" }.
 
 2. **Build and run the application**:
-
-    **windows user**
+   **windows user**
    ```bash
    .\mvnw clean install
    .\mvnw spring-boot:run
-   start http://localhost:8080
    ```
 
    **linux and macOS user**
    ```bash
    mvn clean install
    mvn spring-boot:run
-   open http://localhost:8080
    ```
    
-
+   Open a browser and search *localhost:8080*.
 
 ## 3. Runtime Environment and Constraints
 
