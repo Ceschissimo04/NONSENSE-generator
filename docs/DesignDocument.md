@@ -2,7 +2,7 @@
 
 ## **Domain Model**
 
-![DomainModel.png](images\DomainModel.png)
+![DomainModel.png](images/DomainModel.png)
 
 ## **System Sequence Diagram**
 
